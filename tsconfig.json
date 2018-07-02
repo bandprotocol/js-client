@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es2017",
+    "outDir": "./dist",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "baseUrl": "src",
+    "paths": {
+      "~/*": ["./*"],
+      "test/*": ["../test/*"],
+      "spec/*": ["../spec/*"]
+    }
+  },
+  "include": ["./src/**/*", "./test/**/*", "./spec/**/*"]
+}
