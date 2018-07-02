@@ -1,0 +1,19 @@
+{
+  "name": "bandprotocol",
+  "version": "0.0.1",
+  "description": "Javascript client for Band Protocol blockchain",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bandprotocol/js-client.git"
+  },
+  "author": "Band Protocol Developers <dev@bandprotocol.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bandprotocol/js-client/issues"
+  },
+  "homepage": "https://github.com/bandprotocol/js-client#readme"
+}
