@@ -32,6 +32,7 @@
     "singleQuote": true
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "libsodium-wrappers-sumo": "^0.7.3"
   }
 }
