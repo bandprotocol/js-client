@@ -32,6 +32,6 @@
     "singleQuote": true
   },
   "dependencies": {
-    "buffer": "^5.1.0"
+    "libsodium-wrappers-sumo": "^0.7.3"
   }
 }

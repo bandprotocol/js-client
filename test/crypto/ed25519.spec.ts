@@ -7,34 +7,71 @@ import * as ED25519 from '~/crypto/ed25519'
 
 const should = chai.should()
 
+const ConstantSpec = {
+  SEEDBYTES: 32,
+  PUBLICKEY_HEX_LENGTH: 64,
+  PRIVATEKEY_HEX_LENGTH: 128,
+}
+
 describe('lib:ED25519', () => {
-  it('should exists', () => {
-    ED25519.should.be.an('object')
+  describe('fn:generateKeypair', () => {
+    it('should generate a random key pair', async () => {
+      const keypair = await ED25519.generateKeypair()
+      keypair.should.contain.all.keys('publicKey', 'privateKey')
+      keypair.publicKey.should.have.lengthOf(ConstantSpec.PUBLICKEY_HEX_LENGTH)
+      keypair.privateKey.should.have.lengthOf(
+        ConstantSpec.PRIVATEKEY_HEX_LENGTH
+      )
+    })
+
+    it('should generate a same key pair given 32-byte seed', async () => {
+      const seed = new Uint8Array(Array(32).fill(1))
+      const keypair1 = await ED25519.generateKeypair(seed)
+      const keypair2 = await ED25519.generateKeypair(seed)
+
+      should.equal(keypair1.privateKey, keypair2.privateKey)
+    })
   })
 
-  it('should create seed Buffer', () => {
-    ED25519.createSeed().should.be.an.instanceOf(Buffer)
+  describe('fn:privateKeyToPublicKey', () => {
+    it('should gives a correct public key', async () => {
+      const keypair = await ED25519.generateKeypair()
+      const generatedPublicKey = await ED25519.privateKeyToPublicKey(
+        keypair.privateKey
+      )
+      should.equal(keypair.publicKey, generatedPublicKey)
+    })
   })
 
-  it('should create key pair from seed', () => {
-    const seed = ED25519.createSeed()
-    const keys = ED25519.createKeyPair(seed)
-    should.exist(keys.publicKey)
-    should.exist(keys.secretKey)
+  describe('fn:privateKeyToPublicKeySync', () => {
+    it('should gives a correct public key', async () => {
+      const keypair = await ED25519.generateKeypair()
+      const generatedPublicKey = ED25519.privateKeyToPublicKeySync(
+        keypair.privateKey
+      )
+      should.equal(keypair.publicKey, generatedPublicKey)
+    })
   })
 
-  it('should be able to sign message with secretKey and verify with public key', () => {
-    const seed = ED25519.createSeed()
-    const keys = ED25519.createKeyPair(seed)
-    const message = Buffer.from(
-      'THIS IS A HIGHLY CLASSIFIED MESSAGE!@#$%^&*(',
-      'utf8'
-    )
-    const signature = ED25519.sign(message, keys.publicKey, keys.secretKey)
+  describe('fn:sign & fn:verify', () => {
+    it('should be able to sign message with private key and verify with public key', async () => {
+      const keypair = await ED25519.generateKeypair()
+      const message = new Uint8Array(
+        Array(128)
+          .fill(0)
+          .map(_ => Math.floor(Math.random() * 256))
+      )
 
-    should.exist(signature)
+      const signature = await ED25519.sign(message, keypair.privateKey)
 
-    const valid = ED25519.verify(signature, message, keys.publicKey)
-    should.equal(valid, true)
+      should.exist(signature)
+
+      const isValid = await ED25519.verify(
+        signature,
+        message,
+        keypair.publicKey
+      )
+      should.equal(isValid, true)
+    })
   })
 })

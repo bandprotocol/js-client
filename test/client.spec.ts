@@ -1,11 +1,14 @@
 import * as chai from 'chai'
-import BandProtocolClient from '~/index'
+import { BandProtocolClient } from '~/client'
 
 const should = chai.should()
 
 describe('class:BandProtocolClient', () => {
   it('should initialize', () => {
-    const client = new BandProtocolClient()
+    const client = new BandProtocolClient({
+      httpEndpoint: 'http://localhost:26657',
+      keyProvider: null,
+    })
     should.exist(client)
   })
 })

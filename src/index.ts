@@ -1,1 +1,1 @@
-export default class BandProtocolClient {}
+export { BandProtocolClient as default } from './client'
