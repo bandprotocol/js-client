@@ -22,4 +22,8 @@ export class KeyManager {
   getPublicKey() {
     return this.publicKey
   }
+
+  async sign(message: string): Promise<ED25519.Signature> {
+    return await ED25519.sign(message, this.privateKey)
+  }
 }
