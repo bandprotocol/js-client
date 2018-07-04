@@ -42,9 +42,13 @@ export class KeyManager {
   }
 
   private publicKey: ED25519.PublicKey
+  private address: ED25519.Address
 
   constructor(private privateKey: ED25519.PrivateKey) {
     this.publicKey = ED25519.privateKeyToPublicKeySync(privateKey)
+    ED25519.publicKeyToAddress(this.publicKey).then(
+      address => (this.address = address)
+    )
   }
 
   getPrivateKey() {
@@ -53,6 +57,10 @@ export class KeyManager {
 
   getPublicKey() {
     return this.publicKey
+  }
+
+  getAddress() {
+    return this.address
   }
 
   async generateSignature(messageHex: string): Promise<ED25519.Signature> {

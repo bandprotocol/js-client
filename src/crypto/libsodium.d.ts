@@ -99,7 +99,7 @@ declare module 'libsodium-wrappers-sumo' {
   function from_base64(sBase64: string, nBlocksSize?: any): DefaultBinary
   function to_base64(aBytes: Uint8Array, noNewLine?: any): string
   function output_formats(): string[]
-  function _format_output(output: any, optionalOutputFormat: any): any
+  function _format_output(output: any, optionalOutputFormat?: any): any
   function _is_output_format(format: any): boolean
   function _check_output_format(format: any): void
   function AllocatedBuf(length: any): void
@@ -125,7 +125,7 @@ declare module 'libsodium-wrappers-sumo' {
     additional_data: Uint8Array | undefined,
     public_nonce: Uint8Array,
     key: Uint8Array,
-    outputFormat: any
+    outputFormat?: any
   ): Uint8Array
   function crypto_aead_chacha20poly1305_decrypt_detached(
     secret_nonce: any,
@@ -134,7 +134,7 @@ declare module 'libsodium-wrappers-sumo' {
     additional_data: any,
     public_nonce: any,
     key: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_aead_chacha20poly1305_encrypt(
     message: Uint8Array,
@@ -150,7 +150,7 @@ declare module 'libsodium-wrappers-sumo' {
     secret_nonce: any,
     public_nonce: any,
     key: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_aead_chacha20poly1305_ietf_decrypt(
     secret_nonce: any,
@@ -158,7 +158,7 @@ declare module 'libsodium-wrappers-sumo' {
     additional_data: any,
     public_nonce: any,
     key: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_aead_chacha20poly1305_ietf_decrypt_detached(
     secret_nonce: any,
@@ -167,7 +167,7 @@ declare module 'libsodium-wrappers-sumo' {
     additional_data: any,
     public_nonce: any,
     key: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_aead_chacha20poly1305_ietf_encrypt(
     message: any,
@@ -175,7 +175,7 @@ declare module 'libsodium-wrappers-sumo' {
     secret_nonce: any,
     public_nonce: any,
     key: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_aead_chacha20poly1305_ietf_encrypt_detached(
     message: any,
@@ -183,13 +183,13 @@ declare module 'libsodium-wrappers-sumo' {
     secret_nonce: any,
     public_nonce: any,
     key: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
-  function crypto_auth(message: any, key: any, outputFormat: any): any
+  function crypto_auth(message: any, key: any, outputFormat?: any): any
   function crypto_auth_hmacsha256(
     message: any,
     key: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_auth_hmacsha256_verify(
     tag: any,
@@ -199,7 +199,7 @@ declare module 'libsodium-wrappers-sumo' {
   function crypto_auth_hmacsha512(
     message: any,
     key: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_auth_hmacsha512_verify(
     tag: any,
@@ -210,14 +210,14 @@ declare module 'libsodium-wrappers-sumo' {
   function crypto_box_beforenm(
     publicKey: any,
     secretKey: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_box_detached(
     message: any,
     nonce: any,
     publicKey: any,
     secretKey: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_box_easy(
     message: any,
@@ -230,9 +230,9 @@ declare module 'libsodium-wrappers-sumo' {
     message: any,
     nonce: any,
     sharedKey: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
-  function crypto_box_keypair(outputFormat: StringOutputFormat): IStringKeyPair
+  function crypto_box_keypair(outputFormat?: StringOutputFormat): IStringKeyPair
   function crypto_box_keypair(outputFormat?: Uint8ArrayFormat): IKeyPair
   function crypto_box_open_detached(
     ciphertext: any,
@@ -240,7 +240,7 @@ declare module 'libsodium-wrappers-sumo' {
     nonce: any,
     publicKey: any,
     secretKey: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_box_open_easy(
     ciphertext: any,
@@ -253,12 +253,12 @@ declare module 'libsodium-wrappers-sumo' {
     ciphertext: any,
     nonce: any,
     sharedKey: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_box_seal(
     message: any,
     publicKey: DefaultBinary,
-    outputFormat: StringOutputFormat
+    outputFormat?: StringOutputFormat
   ): string
   function crypto_box_seal(
     message: any,
@@ -269,7 +269,7 @@ declare module 'libsodium-wrappers-sumo' {
     ciphertext: Uint8Array,
     publicKey: DefaultBinary,
     secretKey: DefaultBinary,
-    outputFormat: StringOutputFormat
+    outputFormat?: StringOutputFormat
   ): string
   function crypto_box_seal_open(
     ciphertext: any,
@@ -277,7 +277,7 @@ declare module 'libsodium-wrappers-sumo' {
     secretKey: DefaultBinary,
     outputFormat?: DefaultBinary
   ): DefaultBinary
-  function crypto_box_seed_keypair(seed: any, outputFormat: any): any
+  function crypto_box_seed_keypair(seed: any, outputFormat?: any): any
   function crypto_generichash(
     hash_length: number,
     message: Uint8Array,
@@ -287,32 +287,32 @@ declare module 'libsodium-wrappers-sumo' {
   function crypto_generichash_final(
     state_address: any,
     hash_length: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_generichash_init(
     key: any,
     hash_length: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_generichash_update(
     state_address: any,
     message_chunk: any,
-    outputFormat: any
+    outputFormat?: any
   ): void
-  function crypto_hash(message: any, outputFormat: any): any
-  function crypto_hash_sha256(message: any, outputFormat: any): any
-  function crypto_hash_sha512(message: any, outputFormat: any): any
+  function crypto_hash(message: any, outputFormat?: any): any
+  function crypto_hash_sha256(message: any, outputFormat?: any): any
+  function crypto_hash_sha512(message: any, outputFormat?: any): any
   function crypto_onetimeauth(
     message: Uint8Array,
     key: Uint8Array,
     outputFormat?: any
   ): any
-  function crypto_onetimeauth_final(state_address: any, outputFormat: any): any
-  function crypto_onetimeauth_init(key: any, outputFormat: any): any
+  function crypto_onetimeauth_final(state_address: any, outputFormat?: any): any
+  function crypto_onetimeauth_init(key: any, outputFormat?: any): any
   function crypto_onetimeauth_update(
     state_address: any,
     message_chunk: any,
-    outputFormat: any
+    outputFormat?: any
   ): void
   function crypto_onetimeauth_verify(
     hash: Uint8Array,
@@ -335,7 +335,7 @@ declare module 'libsodium-wrappers-sumo' {
     opsLimit: number,
     memLimit: number,
     algorithm: number,
-    outputFormat: StringOutputFormat
+    outputFormat?: StringOutputFormat
   ): string
   function crypto_pwhash_scryptsalsa208sha256(
     keyLength: number,
@@ -352,29 +352,29 @@ declare module 'libsodium-wrappers-sumo' {
     r: any,
     p: any,
     keyLength: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_pwhash_scryptsalsa208sha256_str(
     password: any,
     opsLimit: any,
     memLimit: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_pwhash_scryptsalsa208sha256_str_verify(
     hashed_password: any,
     password: any,
-    outputFormat: any
+    outputFormat?: any
   ): boolean
   function crypto_pwhash_str(
     password: any,
     opsLimit: any,
     memLimit: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_pwhash_str_verify(
     hashed_password: any,
     password: any,
-    outputFormat: any
+    outputFormat?: any
   ): boolean
   function crypto_scalarmult(
     privateKey: Uint8Array,
@@ -389,7 +389,7 @@ declare module 'libsodium-wrappers-sumo' {
     message: any,
     nonce: any,
     key: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_secretbox_easy(
     message: DefaultBinary,
@@ -402,13 +402,13 @@ declare module 'libsodium-wrappers-sumo' {
     mac: any,
     nonce: any,
     key: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_secretbox_open_easy(
     ciphertext: any,
     nonce: any,
     key: any,
-    outputFormat: StringOutputFormat
+    outputFormat?: StringOutputFormat
   ): string
   function crypto_secretbox_open_easy(
     ciphertext: any,
@@ -416,8 +416,8 @@ declare module 'libsodium-wrappers-sumo' {
     key: any,
     outputFormat?: Uint8ArrayFormat
   ): DefaultBinary
-  function crypto_shorthash(message: any, key: any, outputFormat: any): any
-  function crypto_sign(message: any, privateKey: any, outputFormat: any): any
+  function crypto_shorthash(message: any, key: any, outputFormat?: any): any
+  function crypto_sign(message: any, privateKey: any, outputFormat?: any): any
   function crypto_sign_detached(
     message: any,
     privateKey: any,
@@ -425,11 +425,11 @@ declare module 'libsodium-wrappers-sumo' {
   ): any
   function crypto_sign_ed25519_pk_to_curve25519(
     edPk: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_sign_ed25519_sk_to_curve25519(
     edSk: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_sign_ed25519_sk_to_pk(
     privateKey: any,
@@ -437,13 +437,13 @@ declare module 'libsodium-wrappers-sumo' {
   ): any
   function crypto_sign_ed25519_sk_to_seed(
     privateKey: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_sign_keypair(outputFormat?: any): any
   function crypto_sign_open(
     signedMessage: any,
     publicKey: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_sign_seed_keypair(seed: any, outputFormat?: any): any
   function crypto_sign_verify_detached(
@@ -455,23 +455,23 @@ declare module 'libsodium-wrappers-sumo' {
     input_message: any,
     nonce: any,
     key: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function crypto_stream_chacha20_xor_ic(
     input_message: any,
     nonce: any,
     nonce_increment: any,
     key: any,
-    outputFormat: any
+    outputFormat?: any
   ): any
   function randombytes_buf(length: number, outputFormat?: any): any
-  function randombytes_close(outputFormat: any): void
-  function randombytes_random(outputFormat: any): number
+  function randombytes_close(outputFormat?: any): void
+  function randombytes_random(outputFormat?: any): number
   function randombytes_set_implementation(
     implementation: any,
-    outputFormat: any
+    outputFormat?: any
   ): void
-  function randombytes_stir(outputFormat: any): void
-  function randombytes_uniform(upper_bound: any, outputFormat: any): number
+  function randombytes_stir(outputFormat?: any): void
+  function randombytes_uniform(upper_bound: any, outputFormat?: any): number
   function sodium_version_string(): any
 }

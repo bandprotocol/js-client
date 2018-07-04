@@ -6,6 +6,7 @@ import sodium = require('libsodium-wrappers-sumo')
 
 export type PrivateKey = string
 export type PublicKey = string
+export type Address = string
 export type Message = string | Uint8Array
 export type Signature = string
 
@@ -97,6 +98,21 @@ export function privateKeyToPublicKeySync(privateKey: PrivateKey): PublicKey {
   return privateKey.slice(
     Constants.PRIVATEKEY_HEX_LENGTH - Constants.PUBLICKEY_HEX_LENGTH
   )
+}
+
+/**
+ * Public key to address
+ *
+ * @param publicKey 32-byte public key string
+ */
+export async function publicKeyToAddress(
+  publicKey: PublicKey
+): Promise<Address> {
+  await sodium.ready
+  const AddressBuff = sodium.to_hex(
+    sodium.crypto_hash_sha256(sodium.from_hex(publicKey))
+  )
+  return AddressBuff.slice(0, 20)
 }
 
 /**
