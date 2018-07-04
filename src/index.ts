@@ -7,6 +7,8 @@ interface ClientConfig {
 }
 
 export default class BandProtocolClient {
+  static generateRandomKey = KeyManager.generateRandomKey
+
   blockchain: Blockchain
   key: KeyManager
 
@@ -22,9 +24,5 @@ export default class BandProtocolClient {
     if (config.keyProvider) {
       this.key = new KeyManager(config.keyProvider)
     }
-  }
-
-  static async generateNewKey() {
-    return (await KeyManager.generateRandom()).getPrivateKey()
   }
 }

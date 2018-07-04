@@ -5,9 +5,18 @@ import { KeyManager } from '~/key-manager'
 const should = chai.should()
 
 describe('class:KeyManager', () => {
-  it('should create a new instance with factory generateRandom', async () => {
-    const keyManager = await KeyManager.generateRandom()
-    keyManager.should.be.an.instanceOf(KeyManager)
+  it('should create a new random Mnemonic and private key with static generateRandomKey', async () => {
+    const key = await KeyManager.generateRandomKey()
+    key.should.contain.keys('mnemonic', 'privateKey', 'publicKey')
+  })
+
+  it('should recover a private key from mnemonic', async () => {
+    const originalKey = await KeyManager.generateRandomKey()
+    const mnemonic = originalKey.mnemonic.split(' ')
+
+    const keyManager = await KeyManager.fromMnemonic(mnemonic)
+
+    should.equal(keyManager.getPrivateKey(), originalKey.privateKey)
   })
 
   it('should generate valid signature', async () => {
