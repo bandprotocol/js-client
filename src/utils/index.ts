@@ -1,3 +1,3 @@
-export function hex2base64(hex: string) {
-  return new Buffer(hex, 'hex').toString('base64')
-}
+export * from './decorators'
+export * from './convert'
+export * from './random-string'

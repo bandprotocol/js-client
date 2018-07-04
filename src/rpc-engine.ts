@@ -1,4 +1,5 @@
 import Axios, { AxiosInstance } from 'axios'
+import { generateRandomString } from '~/utils'
 
 interface RPCResponse<Result> {
   jsonrpc: string
@@ -30,26 +31,26 @@ export class RPCEngine {
   async call<Params = object, Result = object>(
     method: string,
     params: Params,
-    id: number = undefined
+    id: string = generateRandomString()
   ): Promise<Result> {
-    console.log('Call', method, params, id)
-    // try {
-    //   const axiosResponse = await this.axios.post('/', {
-    //     jsonrpc: '2.0',
-    //     method,
-    //     params,
-    //     id,
-    //   })
+    try {
+      const axiosResponse = await this.axios.post('/', {
+        jsonrpc: '2.0',
+        method,
+        params,
+        id,
+      })
 
-    //   const data = <RPCResponse<Result>>axiosResponse.data
+      const data = <RPCResponse<Result>>axiosResponse.data
 
-    //   if (data.error) {
-    //     throw new RPCError('BAND_REJECT', data.error)
-    //   }
+      if (data.error) {
+        throw new RPCError('BAND_REJECT', data.error)
+      }
 
-    //   return data.result
-    // } catch (e) {
-    //   throw new RPCError('ENDPOINT_UNAVAILABLE', e)
-    // }
+      return data.result
+    } catch (e) {
+      console.error('RPC Call Error:', e.message)
+      throw new RPCError('ENDPOINT_UNAVAILABLE', e)
+    }
   }
 }

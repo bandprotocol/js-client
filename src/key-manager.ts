@@ -23,7 +23,11 @@ export class KeyManager {
     return this.publicKey
   }
 
-  async sign(message: string): Promise<ED25519.Signature> {
-    return await ED25519.sign(message, this.privateKey)
+  async generateSignature(messageHex: string): Promise<ED25519.Signature> {
+    return await ED25519.sign(messageHex, this.privateKey)
+  }
+
+  async sign(messageHex: string): Promise<string> {
+    return messageHex + (await this.generateSignature(messageHex))
   }
 }

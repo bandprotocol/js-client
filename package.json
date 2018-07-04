@@ -4,6 +4,7 @@
   "description": "Javascript client for Band Protocol blockchain",
   "main": "src/index.ts",
   "scripts": {
+    "build": "tsc",
     "test": "mocha -r ts-node/register -r tsconfig-paths/register test/**/*.spec.ts"
   },
   "repository": {
@@ -33,6 +34,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "buffer": "^5.1.0",
     "libsodium-wrappers-sumo": "^0.7.3"
   }
 }

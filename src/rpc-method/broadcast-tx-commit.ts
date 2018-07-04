@@ -1,5 +1,5 @@
 import { RPCEngine } from '~/rpc-engine'
-import { hex2base64 } from '~/utils'
+import { convert } from '~/utils'
 
 interface Params {
   tx: string
@@ -12,10 +12,12 @@ interface Result {
   height: number
 }
 
-export default async (signedTxnHex: string): Promise<Result> => {
-  const { rpcEngine }: { rpcEngine: RPCEngine } = this
-
-  return await rpcEngine.call<Params, Result>('broadcast_tx_commit', {
-    tx: hex2base64(signedTxnHex),
+export const RPCBroadcastTxCommit = (rpcEngine: RPCEngine) => async (
+  signedTxnHex: string
+): Promise<Result> => {
+  const result = await rpcEngine.call<Params, Result>('broadcast_tx_commit', {
+    tx: convert(signedTxnHex, 'hex', 'base64'),
   })
+
+  return result
 }
