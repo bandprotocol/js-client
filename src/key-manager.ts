@@ -18,7 +18,7 @@ export class KeyManager {
     const keypair = await ED25519.generateKeypair(seed)
 
     return {
-      mnemonic,
+      mnemonic: mnemonic.split(' '),
       privateKey: keypair.privateKey,
       publicKey: keypair.publicKey,
     }

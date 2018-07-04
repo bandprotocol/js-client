@@ -13,6 +13,7 @@ export type Signature = string
 export interface KeyPair {
   privateKey: PrivateKey
   publicKey: PublicKey
+  address: Address
 }
 
 export const Constants = {
@@ -73,6 +74,7 @@ export async function generateKeypair(seed?: Uint8Array): Promise<KeyPair> {
   return {
     privateKey: sodium.to_hex(privateKeyBuff),
     publicKey: sodium.to_hex(publicKeyBuff),
+    address: await publicKeyToAddress(sodium.to_hex(publicKeyBuff)),
   }
 }
 

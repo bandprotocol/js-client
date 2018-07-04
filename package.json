@@ -1,8 +1,9 @@
 {
   "name": "bandprotocol",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Javascript client for Band Protocol blockchain",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "mocha -r ts-node/register -r tsconfig-paths/register test/**/*.spec.ts"

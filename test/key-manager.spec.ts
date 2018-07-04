@@ -12,7 +12,7 @@ describe('class:KeyManager', () => {
 
   it('should recover a private key from mnemonic', async () => {
     const originalKey = await KeyManager.generateRandomKey()
-    const mnemonic = originalKey.mnemonic.split(' ')
+    const mnemonic = originalKey.mnemonic
 
     const keyManager = await KeyManager.fromMnemonic(mnemonic)
 
@@ -27,12 +27,14 @@ describe('class:KeyManager', () => {
     keyManager.should.be.an.instanceOf(KeyManager)
 
     const message = '0a2f48364956b892e4'
-    const signature = await keyManager.sign(message)
+    const signature = await keyManager.generateSignature(message)
 
-    const isValid = ED25519.verify(
+    const isValid = await ED25519.verify(
       signature,
       message,
       keyManager.getPublicKey()
     )
+
+    should.equal(isValid, true)
   })
 })
