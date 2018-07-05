@@ -95,3 +95,7 @@ Compile TypeScript down to ES2017 under `/dist` directory. Useful for distributi
 ```
 yarn build
 ```
+
+## License
+
+[MIT](LICENSE.md)

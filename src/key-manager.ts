@@ -1,11 +1,18 @@
 import * as ED25519 from '~/crypto/ed25519'
 import * as BIP39 from 'bip39'
 
+export interface GeneratedKey {
+  mnemonic: string[]
+  privateKey: string
+  publicKey: string
+  address: string
+}
+
 export class KeyManager {
   /**
    * A utility to create random mnemonic and private key
    */
-  static async generateRandomKey() {
+  static async generateRandomKey(): Promise<GeneratedKey> {
     // Use BIP39 to generate mnemonic
     const mnemonic = BIP39.generateMnemonic()
 
@@ -21,6 +28,7 @@ export class KeyManager {
       mnemonic: mnemonic.split(' '),
       privateKey: keypair.privateKey,
       publicKey: keypair.publicKey,
+      address: keypair.address,
     }
   }
 
