@@ -2,18 +2,17 @@
   "compilerOptions": {
     "module": "commonjs",
     "moduleResolution": "node",
-    "target": "es2017",
+    "target": "es2015",
     "outDir": "./dist",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "declaration": true,
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "~/*": ["./*"],
-      "test/*": ["../test/*"],
-      "spec/*": ["../spec/*"]
+      "~/*": ["./src/*"],
+      "test/*": ["test/*"]
     }
   },
-  "include": ["./index.ts", "./src/**/*", "./test/**/*", "./spec/**/*"]
+  "include": ["./index.ts", "./src/**/*", "./test/**/*"]
 }

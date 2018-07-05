@@ -16,44 +16,36 @@ export interface KeyPair {
   address: Address
 }
 
-export const Constants = {
-  SEEDBYTES: null,
-  PUBLICKEYBYTES: null,
-  PRIVATEKEYBYTES: null,
-  PUBLICKEY_HEX_LENGTH: null,
-  PRIVATEKEY_HEX_LENGTH: null,
+export interface Constants {
+  SEEDBYTES: number
+  PUBLICKEYBYTES: number
+  PRIVATEKEYBYTES: number
+  PUBLICKEY_HEX_LENGTH: number
+  PRIVATEKEY_HEX_LENGTH: number
 }
 
 /**
- * Initialize constants
+ * Expose thatresolves when the lib is ready
  */
-let isSodiumReady = false
+export const ready = sodium.ready
 
 /**
- * Watch for when libsodium is ready, then populate constants
+ * Constants
  */
-sodium.ready.then(() => {
-  isSodiumReady = true
-  Constants.SEEDBYTES = sodium.crypto_sign_SEEDBYTES
-  Constants.PUBLICKEYBYTES = sodium.crypto_sign_PUBLICKEYBYTES
-  Constants.PRIVATEKEYBYTES = sodium.crypto_sign_SECRETKEYBYTES
-  Constants.PUBLICKEY_HEX_LENGTH = sodium.crypto_sign_PUBLICKEYBYTES * 2
-  Constants.PRIVATEKEY_HEX_LENGTH = sodium.crypto_sign_SECRETKEYBYTES * 2
-})
-
-/**
- * Utility function that indicates if libsodium is ready
- */
-export function isReady() {
-  return isSodiumReady
+export function getConstants(): Constants {
+  return {
+    SEEDBYTES: sodium.crypto_sign_SEEDBYTES,
+    PUBLICKEYBYTES: sodium.crypto_sign_PUBLICKEYBYTES,
+    PRIVATEKEYBYTES: sodium.crypto_sign_SECRETKEYBYTES,
+    PUBLICKEY_HEX_LENGTH: sodium.crypto_sign_PUBLICKEYBYTES * 2,
+    PRIVATEKEY_HEX_LENGTH: sodium.crypto_sign_SECRETKEYBYTES * 2,
+  }
 }
 
 /**
  * Utility function to turn hex message format into UInt8Array
  */
-export async function normalizeMessage(message: Message) {
-  await sodium.ready
-
+export function normalizeMessage(message: Message) {
   if (message instanceof Uint8Array) return message
   if (typeof message === 'string') return sodium.from_hex(message)
 
@@ -65,8 +57,7 @@ export async function normalizeMessage(message: Message) {
  *
  * @param seed 32-byte Uint8Array seed
  */
-export async function generateKeypair(seed?: Uint8Array): Promise<KeyPair> {
-  await sodium.ready
+export function generateKeypair(seed?: Uint8Array): KeyPair {
   const { privateKey: privateKeyBuff, publicKey: publicKeyBuff } = seed
     ? sodium.crypto_sign_seed_keypair(seed)
     : sodium.crypto_sign_keypair()
@@ -74,7 +65,7 @@ export async function generateKeypair(seed?: Uint8Array): Promise<KeyPair> {
   return {
     privateKey: sodium.to_hex(privateKeyBuff),
     publicKey: sodium.to_hex(publicKeyBuff),
-    address: await publicKeyToAddress(sodium.to_hex(publicKeyBuff)),
+    address: publicKeyToAddress(sodium.to_hex(publicKeyBuff)),
   }
 }
 
@@ -83,23 +74,9 @@ export async function generateKeypair(seed?: Uint8Array): Promise<KeyPair> {
  *
  * @param privateKey 64-byte private key string
  */
-export async function privateKeyToPublicKey(
-  privateKey: PrivateKey
-): Promise<PublicKey> {
-  await sodium.ready
+export function privateKeyToPublicKey(privateKey: PrivateKey): PublicKey {
   const privateKeyBuff: Uint8Array = sodium.from_hex(privateKey)
   return sodium.to_hex(sodium.crypto_sign_ed25519_sk_to_pk(privateKeyBuff))
-}
-
-/**
- * Get public key from private key synchronously
- *
- * @param privateKey 64-byte private key string
- */
-export function privateKeyToPublicKeySync(privateKey: PrivateKey): PublicKey {
-  return privateKey.slice(
-    Constants.PRIVATEKEY_HEX_LENGTH - Constants.PUBLICKEY_HEX_LENGTH
-  )
 }
 
 /**
@@ -107,14 +84,11 @@ export function privateKeyToPublicKeySync(privateKey: PrivateKey): PublicKey {
  *
  * @param publicKey 32-byte public key string
  */
-export async function publicKeyToAddress(
-  publicKey: PublicKey
-): Promise<Address> {
-  await sodium.ready
+export function publicKeyToAddress(publicKey: PublicKey): Address {
   const AddressBuff = sodium.to_hex(
     sodium.crypto_hash_sha256(sodium.from_hex(publicKey))
   )
-  return AddressBuff.slice(0, 20)
+  return AddressBuff.slice(0, 40)
 }
 
 /**
@@ -123,12 +97,8 @@ export async function publicKeyToAddress(
  * @param message arbitrary message
  * @param privateKey 64-byte private key string
  */
-export async function sign(
-  message: Message,
-  privateKey: PrivateKey
-): Promise<Signature> {
-  await sodium.ready
-  let messageBuff = await normalizeMessage(message)
+export function sign(message: Message, privateKey: PrivateKey): Signature {
+  let messageBuff = normalizeMessage(message)
   const privateKeyBuff: Uint8Array = sodium.from_hex(privateKey)
   return sodium.to_hex(sodium.crypto_sign_detached(messageBuff, privateKeyBuff))
 }
@@ -140,14 +110,13 @@ export async function sign(
  * @param message arbitrary message
  * @param publicKey 32-byte private key string
  */
-export async function verify(
+export function verify(
   signature: Signature,
   message: Message,
   publicKey: PublicKey
-): Promise<boolean> {
-  await sodium.ready
+): boolean {
   const signatureBuff: Uint8Array = sodium.from_hex(signature)
-  let messageBuff = await normalizeMessage(message)
+  let messageBuff = normalizeMessage(message)
   const publicKeyBuff: Uint8Array = sodium.from_hex(publicKey)
 
   return sodium.crypto_sign_verify_detached(

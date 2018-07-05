@@ -1,5 +1,7 @@
+require('buffer')
 import { Blockchain } from '~/blockchain'
 import { KeyManager } from '~/key-manager'
+import { ready } from '~/crypto/ed25519'
 
 interface ClientConfig {
   httpEndpoint?: string
@@ -7,6 +9,7 @@ interface ClientConfig {
 }
 
 export default class BandProtocolClient {
+  static ready = ready
   static generateRandomKey = KeyManager.generateRandomKey
 
   blockchain: Blockchain
@@ -22,7 +25,7 @@ export default class BandProtocolClient {
     }
 
     if (config.keyProvider) {
-      this.key = new KeyManager(config.keyProvider)
+      this.key = KeyManager.fromPrivateKey(config.keyProvider)
     }
   }
 }
