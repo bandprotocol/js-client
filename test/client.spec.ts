@@ -4,8 +4,7 @@ import BandProtocolClient from '~/index'
 const should = chai.should()
 
 describe('class:BandProtocolClient', () => {
-  it('should initialize', async () => {
-    await BandProtocolClient.ready
+  it('should initialize', () => {
     const client = new BandProtocolClient({
       httpEndpoint: 'http://localhost:26657',
       keyProvider: null,

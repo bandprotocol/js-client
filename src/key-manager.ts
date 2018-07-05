@@ -16,12 +16,11 @@ export class KeyManager {
     // Use BIP39 to generate mnemonic
     const mnemonic = BIP39.generateMnemonic()
 
-    const { SEEDBYTES } = ED25519.getConstants()
+    const { SEEDBYTES } = ED25519.Constants
 
     // The mnemonic yeilds 64 bytes of seed
     // the ED25519 only use 32 bytes, which is plenty enough
     const seed: Buffer = BIP39.mnemonicToSeed(mnemonic).slice(0, SEEDBYTES)
-    console.log('Length', seed.length)
     const keypair = ED25519.generateKeypair(seed)
 
     return {
@@ -40,7 +39,7 @@ export class KeyManager {
       throw new Error('Mnemonic phrase must have 12 words')
     }
 
-    const { SEEDBYTES } = ED25519.getConstants()
+    const { SEEDBYTES } = ED25519.Constants
 
     const seed: Buffer = BIP39.mnemonicToSeed(mnemonic.join(' ')).slice(
       0,

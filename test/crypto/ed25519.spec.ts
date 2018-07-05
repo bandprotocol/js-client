@@ -15,8 +15,7 @@ const ConstantSpec = {
 
 describe('lib:ED25519', () => {
   describe('fn:generateKeypair', () => {
-    it('should generate a random key pair', async () => {
-      await ED25519.ready
+    it('should generate a random key pair', () => {
       const keypair = ED25519.generateKeypair()
       keypair.should.contain.all.keys('publicKey', 'privateKey')
       keypair.publicKey.should.have.lengthOf(ConstantSpec.PUBLICKEY_HEX_LENGTH)
@@ -25,9 +24,8 @@ describe('lib:ED25519', () => {
       )
     })
 
-    it('should generate a same key pair given 32-byte seed', async () => {
-      await ED25519.ready
-      const seed = new Uint8Array(Array(32).fill(1))
+    it('should generate a same key pair given 32-byte seed', () => {
+      const seed = new Buffer(Array(32).fill(1))
       const keypair1 = ED25519.generateKeypair(seed)
       const keypair2 = ED25519.generateKeypair(seed)
 
@@ -36,10 +34,9 @@ describe('lib:ED25519', () => {
   })
 
   describe('fn:privateKeyToPublicKey', () => {
-    it('should gives a correct public key', async () => {
-      await ED25519.ready
+    it('should gives a correct public key', () => {
       const keypair = ED25519.generateKeypair()
-      const generatedPublicKey = await ED25519.privateKeyToPublicKey(
+      const generatedPublicKey = ED25519.privateKeyToPublicKey(
         keypair.privateKey
       )
       should.equal(keypair.publicKey, generatedPublicKey)
@@ -47,10 +44,9 @@ describe('lib:ED25519', () => {
   })
 
   describe('fn:sign & fn:verify', () => {
-    it('should be able to sign message with private key and verify with public key', async () => {
-      await ED25519.ready
+    it('should be able to sign message with private key and verify with public key', () => {
       const keypair = ED25519.generateKeypair()
-      const message = new Uint8Array(
+      const message = new Buffer(
         Array(128)
           .fill(0)
           .map(_ => Math.floor(Math.random() * 256))

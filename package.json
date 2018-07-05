@@ -1,9 +1,9 @@
 {
   "name": "bandprotocol",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "Javascript client for Band Protocol blockchain",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc && tspath",
     "prepublishOnly": "tsc && tspath",
@@ -39,6 +39,7 @@
     "axios": "^0.18.0",
     "bip39": "^2.5.0",
     "buffer": "^5.1.0",
-    "libsodium-wrappers-sumo": "^0.7.3"
+    "sha.js": "^2.4.11",
+    "sodium-universal": "^2.0.0"
   }
 }

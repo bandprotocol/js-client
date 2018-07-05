@@ -1,7 +1,6 @@
 require('buffer')
 import { Blockchain } from '~/blockchain'
 import { KeyManager } from '~/key-manager'
-import { ready } from '~/crypto/ed25519'
 
 interface ClientConfig {
   httpEndpoint?: string
@@ -9,7 +8,6 @@ interface ClientConfig {
 }
 
 export default class BandProtocolClient {
-  static ready = ready
   static generateRandomKey = KeyManager.generateRandomKey
 
   blockchain: Blockchain

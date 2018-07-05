@@ -1,4 +1,5 @@
-import sodium = require('libsodium-wrappers-sumo')
+import sodium = require('sodium-universal')
+import shajs = require('sha.js')
 
 /**
  * Define Interfaces
@@ -7,7 +8,7 @@ import sodium = require('libsodium-wrappers-sumo')
 export type PrivateKey = string
 export type PublicKey = string
 export type Address = string
-export type Message = string | Uint8Array
+export type Message = string | Buffer
 export type Signature = string
 
 export interface KeyPair {
@@ -20,34 +21,33 @@ export interface Constants {
   SEEDBYTES: number
   PUBLICKEYBYTES: number
   PRIVATEKEYBYTES: number
+  ADDRESSBYTES: number
+  SIGNATUREBYTES: number
   PUBLICKEY_HEX_LENGTH: number
   PRIVATEKEY_HEX_LENGTH: number
+  ADDRESSBYTES_HEX_LENGTH: number
 }
-
-/**
- * Expose thatresolves when the lib is ready
- */
-export const ready = sodium.ready
 
 /**
  * Constants
  */
-export function getConstants(): Constants {
-  return {
-    SEEDBYTES: sodium.crypto_sign_SEEDBYTES,
-    PUBLICKEYBYTES: sodium.crypto_sign_PUBLICKEYBYTES,
-    PRIVATEKEYBYTES: sodium.crypto_sign_SECRETKEYBYTES,
-    PUBLICKEY_HEX_LENGTH: sodium.crypto_sign_PUBLICKEYBYTES * 2,
-    PRIVATEKEY_HEX_LENGTH: sodium.crypto_sign_SECRETKEYBYTES * 2,
-  }
+export const Constants = <Constants>{
+  SEEDBYTES: sodium.crypto_sign_SEEDBYTES,
+  PUBLICKEYBYTES: sodium.crypto_sign_PUBLICKEYBYTES,
+  PRIVATEKEYBYTES: sodium.crypto_sign_SECRETKEYBYTES,
+  ADDRESSBYTES: 20,
+  SIGNATUREBYTES: sodium.crypto_sign_BYTES,
+  PUBLICKEY_HEX_LENGTH: sodium.crypto_sign_PUBLICKEYBYTES * 2,
+  PRIVATEKEY_HEX_LENGTH: sodium.crypto_sign_SECRETKEYBYTES * 2,
+  ADDRESSBYTES_HEX_LENGTH: 40,
 }
 
 /**
  * Utility function to turn hex message format into UInt8Array
  */
 export function normalizeMessage(message: Message) {
-  if (message instanceof Uint8Array) return message
-  if (typeof message === 'string') return sodium.from_hex(message)
+  if (message instanceof Buffer) return message
+  if (typeof message === 'string') return Buffer.from(message, 'hex')
 
   throw new Error('Unsupported message')
 }
@@ -55,17 +55,20 @@ export function normalizeMessage(message: Message) {
 /**
  * Generate a random Ed25519 keypair
  *
- * @param seed 32-byte Uint8Array seed
+ * @param seed 32-byte Buffer seed
  */
-export function generateKeypair(seed?: Uint8Array): KeyPair {
-  const { privateKey: privateKeyBuff, publicKey: publicKeyBuff } = seed
-    ? sodium.crypto_sign_seed_keypair(seed)
-    : sodium.crypto_sign_keypair()
+export function generateKeypair(seed?: Buffer): KeyPair {
+  const privateKeyBuff = new Buffer(Constants.PRIVATEKEYBYTES)
+  const publicKeyBuff = new Buffer(Constants.PUBLICKEYBYTES)
+
+  if (seed && seed.length === Constants.SEEDBYTES)
+    sodium.crypto_sign_seed_keypair(publicKeyBuff, privateKeyBuff, seed)
+  else sodium.crypto_sign_keypair(publicKeyBuff, privateKeyBuff)
 
   return {
-    privateKey: sodium.to_hex(privateKeyBuff),
-    publicKey: sodium.to_hex(publicKeyBuff),
-    address: publicKeyToAddress(sodium.to_hex(publicKeyBuff)),
+    privateKey: privateKeyBuff.toString('hex'),
+    publicKey: publicKeyBuff.toString('hex'),
+    address: publicKeyToAddress(privateKeyBuff.toString('hex')),
   }
 }
 
@@ -75,8 +78,10 @@ export function generateKeypair(seed?: Uint8Array): KeyPair {
  * @param privateKey 64-byte private key string
  */
 export function privateKeyToPublicKey(privateKey: PrivateKey): PublicKey {
-  const privateKeyBuff: Uint8Array = sodium.from_hex(privateKey)
-  return sodium.to_hex(sodium.crypto_sign_ed25519_sk_to_pk(privateKeyBuff))
+  return privateKey.slice(
+    Constants.PRIVATEKEY_HEX_LENGTH - Constants.PUBLICKEY_HEX_LENGTH,
+    Constants.PRIVATEKEY_HEX_LENGTH
+  )
 }
 
 /**
@@ -85,12 +90,11 @@ export function privateKeyToPublicKey(privateKey: PrivateKey): PublicKey {
  * @param publicKey 32-byte public key string
  */
 export function publicKeyToAddress(publicKey: PublicKey): Address {
-  const AddressBuff = sodium.to_hex(
-    sodium.crypto_hash_sha256(sodium.from_hex(publicKey))
-  )
-  return AddressBuff.slice(0, 40)
+  const Address = shajs('sha256')
+    .update(publicKey)
+    .digest('hex')
+  return Address.slice(0, Constants.ADDRESSBYTES_HEX_LENGTH)
 }
-
 /**
  * Get message signature
  *
@@ -98,15 +102,19 @@ export function publicKeyToAddress(publicKey: PublicKey): Address {
  * @param privateKey 64-byte private key string
  */
 export function sign(message: Message, privateKey: PrivateKey): Signature {
-  let messageBuff = normalizeMessage(message)
-  const privateKeyBuff: Uint8Array = sodium.from_hex(privateKey)
-  return sodium.to_hex(sodium.crypto_sign_detached(messageBuff, privateKeyBuff))
+  const messageBuff = normalizeMessage(message)
+  const privateKeyBuff = Buffer.from(privateKey, 'hex')
+  const signatureBuff = new Buffer(Constants.SIGNATUREBYTES)
+
+  sodium.crypto_sign_detached(signatureBuff, messageBuff, privateKeyBuff)
+
+  return signatureBuff.toString('hex')
 }
 
 /**
  * Verify signature
  *
- * @param signature
+ * @param signature 64-byte signature
  * @param message arbitrary message
  * @param publicKey 32-byte private key string
  */
@@ -115,9 +123,9 @@ export function verify(
   message: Message,
   publicKey: PublicKey
 ): boolean {
-  const signatureBuff: Uint8Array = sodium.from_hex(signature)
-  let messageBuff = normalizeMessage(message)
-  const publicKeyBuff: Uint8Array = sodium.from_hex(publicKey)
+  const signatureBuff = Buffer.from(signature, 'hex')
+  const messageBuff = normalizeMessage(message)
+  const publicKeyBuff = Buffer.from(publicKey, 'hex')
 
   return sodium.crypto_sign_verify_detached(
     signatureBuff,

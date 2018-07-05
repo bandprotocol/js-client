@@ -14,5 +14,5 @@
       "test/*": ["test/*"]
     }
   },
-  "include": ["./index.ts", "./src/**/*", "./test/**/*"]
+  "include": ["./src/**/*"]
 }
