@@ -10,9 +10,10 @@
     "declaration": true,
     "baseUrl": ".",
     "paths": {
+      "@": ["."],
       "~/*": ["./src/*"],
       "test/*": ["test/*"]
     }
   },
-  "include": ["./src/**/*"]
+  "include": ["./index.ts", "./src/**/*"]
 }

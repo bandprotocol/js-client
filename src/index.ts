@@ -1,4 +1,3 @@
-require('buffer')
 import { Blockchain } from '~/blockchain'
 import { KeyManager } from '~/key-manager'
 

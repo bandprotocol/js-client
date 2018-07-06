@@ -1,5 +1,5 @@
 import * as ED25519 from '~/crypto/ed25519'
-import * as BIP39 from 'bip39'
+import * as BIP39 from '~/crypto/bip39'
 
 export interface GeneratedKey {
   mnemonic: string[]
