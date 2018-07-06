@@ -1,4 +1,4 @@
-import sodium = require('sodium-universal')
+import sodium = require('sodium-javascript')
 import shajs = require('sha.js')
 
 /**
