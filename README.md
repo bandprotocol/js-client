@@ -57,20 +57,20 @@ import BandProtocolClient from 'bandprotocol'
 // Initialize client
 const client = new BandProtocolClient({
   httpEndpoint: 'http://localhost:26657',
-  keyProvider: '<privateKey>'
+  keyProvider: '<privateKey>',
 })
 
 // Generate unsigned transaction from node
 const unsignedTx = await client.blockchain.txgen({
-  "msgid": 1,
-  "vk": "6ddb22994b551f4da5818e7a257d467e9af753348194f31dddc5f9aa489d3da1",
-  "dest": "eed0ea6675438f06baa20a75c3ea3e027728e5d1",
-  "token": "0000000000000000000000000000000000000000",
-  "value": "200"
+  msgid: 1,
+  vk: '6ddb22994b551f4da5818e7a257d467e9af753348194f31dddc5f9aa489d3da1',
+  dest: 'eed0ea6675438f06baa20a75c3ea3e027728e5d1',
+  token: '0000000000000000000000000000000000000000',
+  value: '200',
 })
 
 // Sign the transaction
-const signedTx = await client.key.sign(unsignedTx)
+const signedTx = client.key.sign(unsignedTx)
 
 // Broadcast the signed transaction
 const result = await client.blockchain.broadcastTxn(signedTx)

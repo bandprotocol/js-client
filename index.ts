@@ -1,11 +1,17 @@
 // Shim
-declare var global: { crypto }
+declare var global: { crypto; window }
 require('buffer')
-global.crypto = require('isomorphic-webcrypto')
+
+// Shim window scope in Node.js
+if (typeof window === 'undefined') {
+  global.window = global
+}
+
+// Shim crypto module with isomorphic-webcrypto
+global.crypto = global.crypto || require('isomorphic-webcrypto')
 
 // Business as usual
 import BandProtocolClient from './src/index'
 
-module.exports = {
-  default: BandProtocolClient,
-}
+module.exports = BandProtocolClient
+module.exports.default = BandProtocolClient

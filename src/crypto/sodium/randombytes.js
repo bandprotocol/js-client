@@ -1,5 +1,4 @@
 var assert = require('nanoassert')
-var crypto = require('isomorphic-webcrypto')
 var randomBytes = require('../crappy-random')
 
 Object.defineProperty(module.exports, 'randombytes', {
