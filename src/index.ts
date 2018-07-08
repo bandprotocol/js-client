@@ -3,7 +3,12 @@ import { KeyManager } from '~/key-manager'
 
 interface ClientConfig {
   httpEndpoint?: string
-  keyProvider?: string
+  keyProvider?:
+    | string
+    | {
+        box: string
+        passcode: string
+      }
 }
 
 export default class BandProtocolClient {
@@ -22,7 +27,18 @@ export default class BandProtocolClient {
     }
 
     if (config.keyProvider) {
-      this.key = KeyManager.fromPrivateKey(config.keyProvider)
+      if (typeof config.keyProvider === 'string') {
+        this.key = KeyManager.fromPrivateKey(config.keyProvider)
+      } else if (
+        typeof config.keyProvider === 'object' &&
+        config.keyProvider.box &&
+        config.keyProvider.passcode
+      ) {
+        this.key = KeyManager.fromSecretBox(
+          config.keyProvider.box,
+          config.keyProvider.passcode
+        )
+      }
     }
   }
 }

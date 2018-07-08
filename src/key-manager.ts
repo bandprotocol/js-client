@@ -1,5 +1,6 @@
 import * as ED25519 from '~/crypto/ed25519'
 import * as BIP39 from '~/crypto/bip39'
+import * as SecretBox from '~/crypto/secretbox'
 
 export interface GeneratedKey {
   mnemonic: string[]
@@ -57,6 +58,21 @@ export class KeyManager {
     return new KeyManager(privateKey)
   }
 
+  /**
+   * A factory that instantiate KeyManager from SecretBox
+   */
+  static fromSecretBox(
+    box: SecretBox.EncryptedMessage,
+    passcode: SecretBox.Passcode
+  ) {
+    try {
+      const privateKey = SecretBox.decrypt(box, passcode)
+      return new KeyManager(privateKey)
+    } catch (e) {
+      return null
+    }
+  }
+
   private publicKey: ED25519.PublicKey
   private address: ED25519.Address
 
@@ -83,5 +99,9 @@ export class KeyManager {
 
   sign(messageHex: string): string {
     return messageHex + this.generateSignature(messageHex)
+  }
+
+  encrypt(passcode: SecretBox.Passcode) {
+    return SecretBox.encrypt(this.privateKey, passcode)
   }
 }

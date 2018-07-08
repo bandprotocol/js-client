@@ -81,7 +81,7 @@ export function encrypt(
  * @param box base64 encrypted message
  * @param passcode utf8 string
  */
-export function decrypt(box: EncryptedMessage, passcode: Passcode): Message {
+export function decrypt(box: EncryptedMessage, passcode: Passcode): string {
   const encryptedBufferNonce = Buffer.from(box, 'base64')
 
   const nonceBuffer = encryptedBufferNonce.slice(0, Constants.NONCEBYTES)
@@ -97,6 +97,10 @@ export function decrypt(box: EncryptedMessage, passcode: Passcode): Message {
     nonceBuffer,
     key
   )
+
+  // Throw if the passcode is incorrect (messageBuffer is empty)
+  if (![...messageBuffer.values()].some(v => v !== 0))
+    throw new Error('Incorrect passcode')
 
   return messageBuffer.toString('utf8')
 }

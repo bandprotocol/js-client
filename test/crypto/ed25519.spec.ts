@@ -1,5 +1,5 @@
 /**
- * Tests for ED25519, copied from https://github.com/1p6/supercop.js
+ * Tests for ED25519
  */
 
 import * as chai from 'chai'
