@@ -8,7 +8,7 @@ export const rpc = fn => (target, key: string): any => {
         throw new Error(
           'Please supply httpEndpoint in client config to use RPC feature'
         )
-      return fn.bind(this)
+      return fn(this.rpcEngine)
     },
 
     set(value) {
