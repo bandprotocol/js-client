@@ -13,6 +13,7 @@ browserify('index.ts', { standalone: 'default' })
   })
   .plugin(derequire)
   .plugin(tsify, { project: tsconfig })
+  .external('isomorphic-fetch')
   .bundle()
   .on('error', function(error) {
     console.error(error.toString())

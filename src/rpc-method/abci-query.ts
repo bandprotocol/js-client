@@ -16,7 +16,7 @@ export const RPCAbciQuery = <Response = any>(rpcEngine: RPCEngine) => async (
   method: string,
   params: object
 ): Promise<Response> => {
-  const result = await rpcEngine.call<Params, Result>('broadcast_tx_commit', {
+  const result = await rpcEngine.call<Params, Result>('abci_query', {
     data: convert(JSON.stringify({ method, params }), 'utf8', 'hex'),
   })
 

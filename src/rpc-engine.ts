@@ -1,4 +1,3 @@
-import Axios, { AxiosInstance } from 'axios'
 import { generateRandomString } from '~/utils'
 
 interface RPCResponse<Result> {
@@ -19,14 +18,7 @@ export class RPCError extends Error {
 }
 
 export class RPCEngine {
-  private axios: AxiosInstance
-
-  constructor(private endpoint: string, timeout: number = 1000) {
-    this.axios = Axios.create({
-      baseURL: endpoint,
-      timeout,
-    })
-  }
+  constructor(private endpoint: string) {}
 
   async call<Params = object, Result = object>(
     method: string,
@@ -34,14 +26,17 @@ export class RPCEngine {
     id: string = generateRandomString()
   ): Promise<Result> {
     try {
-      const axiosResponse = await this.axios.post('/', {
-        jsonrpc: '2.0',
-        method,
-        params,
-        id,
+      const response = await fetch(this.endpoint, {
+        method: 'POST',
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          method,
+          params,
+          id,
+        }),
       })
 
-      const data = <RPCResponse<Result>>axiosResponse.data
+      const data = await response.json()
 
       if (data.error) {
         throw new RPCError('BAND_REJECT', data.error)
