@@ -1958,7 +1958,7 @@ function scalarbase(p, s) {
 }
 
 function crypto_sign_keypair(pk, sk, seeded) {
-  check(pk, sodium.crypto_sign_PUBLICKEYBYTES)
+  check(pk, sodium.crypto_sign_VERIFYKEYBYTES)
   check(sk, sodium.crypto_sign_SECRETKEYBYTES)
 
   var d = new Buffer(64)
@@ -2147,7 +2147,7 @@ function unpackneg(r, p) {
 function crypto_sign_open(msg, sm, pk) {
   check(msg, sm.length - crypto_sign_BYTES)
   check(sm, crypto_sign_BYTES)
-  check(pk, crypto_sign_PUBLICKEYBYTES)
+  check(pk, crypto_sign_VERIFYKEYBYTES)
   var n = sm.length
   var m = new Buffer(sm.length)
 
@@ -2247,14 +2247,14 @@ var crypto_secretbox_KEYBYTES = 32,
   crypto_secretbox_BOXZEROBYTES = 16,
   crypto_scalarmult_BYTES = 32,
   crypto_scalarmult_SCALARBYTES = 32,
-  crypto_box_PUBLICKEYBYTES = 32,
+  crypto_box_VERIFYKEYBYTES = 32,
   crypto_box_SECRETKEYBYTES = 32,
   crypto_box_BEFORENMBYTES = 32,
   crypto_box_NONCEBYTES = crypto_secretbox_NONCEBYTES,
   crypto_box_ZEROBYTES = crypto_secretbox_ZEROBYTES,
   crypto_box_BOXZEROBYTES = crypto_secretbox_BOXZEROBYTES,
   crypto_sign_BYTES = 64,
-  crypto_sign_PUBLICKEYBYTES = 32,
+  crypto_sign_VERIFYKEYBYTES = 32,
   crypto_sign_SECRETKEYBYTES = 64,
   crypto_sign_SEEDBYTES = 32,
   crypto_hash_BYTES = 64
@@ -2264,7 +2264,7 @@ sodium.memzero = function(len, offset) {
 }
 
 sodium.crypto_sign_BYTES = crypto_sign_BYTES
-sodium.crypto_sign_PUBLICKEYBYTES = crypto_sign_PUBLICKEYBYTES
+sodium.crypto_sign_VERIFYKEYBYTES = crypto_sign_VERIFYKEYBYTES
 sodium.crypto_sign_SECRETKEYBYTES = crypto_sign_SECRETKEYBYTES
 sodium.crypto_sign_SEEDBYTES = crypto_sign_SEEDBYTES
 sodium.crypto_sign_keypair = crypto_sign_keypair
@@ -2284,7 +2284,6 @@ sodium.crypto_scalarmult_BYTES = crypto_scalarmult_BYTES
 sodium.crypto_scalarmult_SCALARBYTES = crypto_scalarmult_SCALARBYTES
 sodium.crypto_scalarmult_base = crypto_scalarmult_base
 sodium.crypto_scalarmult = crypto_scalarmult
-
 ;(sodium.crypto_secretbox_KEYBYTES = crypto_secretbox_KEYBYTES),
   (sodium.crypto_secretbox_NONCEBYTES = crypto_secretbox_NONCEBYTES),
   (sodium.crypto_secretbox_MACBYTES = 16)

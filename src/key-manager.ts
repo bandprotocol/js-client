@@ -4,14 +4,14 @@ import * as SecretBox from '~/crypto/secretbox'
 
 export interface GeneratedKey {
   mnemonic: string[]
-  privateKey: string
-  publicKey: string
+  secretKey: string
+  verifyKey: string
   address: string
 }
 
 export class KeyManager {
   /**
-   * A utility to create random mnemonic and private key
+   * A utility to create random mnemonic and secret key
    */
   static generateRandomKey(): GeneratedKey {
     // Use BIP39 to generate mnemonic
@@ -26,8 +26,8 @@ export class KeyManager {
 
     return {
       mnemonic: mnemonic.split(' '),
-      privateKey: keypair.privateKey,
-      publicKey: keypair.publicKey,
+      secretKey: keypair.secretKey,
+      verifyKey: keypair.verifyKey,
       address: keypair.address,
     }
   }
@@ -48,14 +48,14 @@ export class KeyManager {
     )
     const keypair = ED25519.generateKeypair(seed)
 
-    return new KeyManager(keypair.privateKey)
+    return new KeyManager(keypair.secretKey)
   }
 
   /**
-   * A factory that instantiate KeyManager from private key
+   * A factory that instantiate KeyManager from secret key
    */
-  static fromPrivateKey(privateKey: ED25519.PrivateKey) {
-    return new KeyManager(privateKey)
+  static fromSecretKey(secretKey: ED25519.SecretKey) {
+    return new KeyManager(secretKey)
   }
 
   /**
@@ -66,27 +66,27 @@ export class KeyManager {
     passcode: SecretBox.Passcode
   ) {
     try {
-      const privateKey = SecretBox.decrypt(box, passcode)
-      return new KeyManager(privateKey)
+      const secretKey = SecretBox.decrypt(box, passcode)
+      return new KeyManager(secretKey)
     } catch (e) {
       return null
     }
   }
 
-  private publicKey: ED25519.PublicKey
+  private verifyKey: ED25519.VerifyKey
   private address: ED25519.Address
 
-  private constructor(private privateKey: ED25519.PrivateKey) {
-    this.publicKey = ED25519.privateKeyToPublicKey(privateKey)
-    this.address = ED25519.publicKeyToAddress(this.publicKey)
+  private constructor(private secretKey: ED25519.SecretKey) {
+    this.verifyKey = ED25519.secretKeyToVerifyKey(secretKey)
+    this.address = ED25519.verifyKeyToAddress(this.verifyKey)
   }
 
-  getPrivateKey() {
-    return this.privateKey
+  getSecretKey() {
+    return this.secretKey
   }
 
-  getPublicKey() {
-    return this.publicKey
+  getVerifyKey() {
+    return this.verifyKey
   }
 
   getAddress() {
@@ -94,7 +94,7 @@ export class KeyManager {
   }
 
   generateSignature(messageHex: string): ED25519.Signature {
-    return ED25519.sign(messageHex, this.privateKey)
+    return ED25519.sign(messageHex, this.secretKey)
   }
 
   sign(messageHex: string): string {
@@ -102,6 +102,6 @@ export class KeyManager {
   }
 
   encrypt(passcode: SecretBox.Passcode) {
-    return SecretBox.encrypt(this.privateKey, passcode)
+    return SecretBox.encrypt(this.secretKey, passcode)
   }
 }

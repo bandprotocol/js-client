@@ -29,7 +29,7 @@ export default class BandProtocolClient {
 
     if (config.keyProvider) {
       if (typeof config.keyProvider === 'string') {
-        this.key = KeyManager.fromPrivateKey(config.keyProvider)
+        this.key = KeyManager.fromSecretKey(config.keyProvider)
       } else if (
         typeof config.keyProvider === 'object' &&
         config.keyProvider.box &&

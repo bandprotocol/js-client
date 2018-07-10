@@ -24,11 +24,11 @@ npm i --save bandprotocol
 
 ```js
 import BandProtocolClient from 'bandprotocol'
-import { privateKey } from './config'
+import { secretKey } from './config'
 
 const client = new BandProtocolClient({
   httpEndpoint: 'http://localhost:26657',
-  keyProvider: privateKey,
+  keyProvider: secretKey,
 })
 ```
 
@@ -39,15 +39,15 @@ This library supports secure key generations using ED25519 algorithm.
 ```js
 const {
   mnemonic, // Array<string x 12> of Mnemonic phrase
-  privateKey, // 64-byte hex string private key
-  publicKey, // 32-byte hex string public key
+  secretKey, // 64-byte hex string secret key
+  verifyKey, // 32-byte hex string public key
   address, // 20-byte hex string address
 } = BandProtocolClient.generateRandomKey()
 ```
 
 ### Transaction Generation
 
-Every transaction is created on the remote node via JSON-RPC protocol and signed on the client. This design allows higher portability comparing to client-generated transactions, while the client keeps its private keys secured.
+Every transaction is created on the remote node via JSON-RPC protocol and signed on the client. This design allows higher portability comparing to client-generated transactions, while the client keeps its secret keys secured.
 
 See [BandProtocol's Gitbook](https://bandprotocol.gitbook.io/blockchain) for documentation on transaction formats.
 
@@ -57,7 +57,7 @@ import BandProtocolClient from 'bandprotocol'
 // Initialize client
 const client = new BandProtocolClient({
   httpEndpoint: 'http://localhost:26657',
-  keyProvider: '<privateKey>',
+  keyProvider: '<secretKey>',
 })
 
 // Generate unsigned transaction from node

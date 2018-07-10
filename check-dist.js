@@ -7,7 +7,7 @@ console.log('Random Keys', keys)
 const BLOCKCHAIN_ENDPOINT = 'http://testnet.bandprotocol.com:26657'
 
 const client = new BandProtocolClient({
-  keyProvider: keys.privateKey,
+  keyProvider: keys.secretKey,
   httpEndpoint: BLOCKCHAIN_ENDPOINT,
 })
 

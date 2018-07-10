@@ -13,18 +13,18 @@ describe('class:BandProtocolClient', () => {
     should.exist(client)
   })
 
-  it('should generate passcode-encryped key and recover private key from it', () => {
+  it('should generate passcode-encryped key and recover secret key from it', () => {
     const passcode = '123456789'
-    const { privateKey } = BandProtocolClient.generateRandomKey()
+    const { secretKey } = BandProtocolClient.generateRandomKey()
 
     const client = new BandProtocolClient({
-      keyProvider: privateKey,
+      keyProvider: secretKey,
     })
     const box = client.key.encrypt(passcode)
     const recoveredClient = new BandProtocolClient({
       keyProvider: { box, passcode },
     })
 
-    should.equal(privateKey, recoveredClient.key.getPrivateKey())
+    should.equal(secretKey, recoveredClient.key.getSecretKey())
   })
 })

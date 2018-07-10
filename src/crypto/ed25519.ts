@@ -5,26 +5,26 @@ import shajs = require('sha.js')
  * Define Interfaces
  */
 
-export type PrivateKey = string
-export type PublicKey = string
+export type SecretKey = string
+export type VerifyKey = string
 export type Address = string
 export type Message = string | Buffer
 export type Signature = string
 
 export interface KeyPair {
-  privateKey: PrivateKey
-  publicKey: PublicKey
+  secretKey: SecretKey
+  verifyKey: VerifyKey
   address: Address
 }
 
 export interface Constants {
   SEEDBYTES: number
-  PUBLICKEYBYTES: number
-  PRIVATEKEYBYTES: number
+  VERIFYKEYBYTES: number
+  SECRETKEYBYTES: number
   ADDRESSBYTES: number
   SIGNATUREBYTES: number
-  PUBLICKEY_HEX_LENGTH: number
-  PRIVATEKEY_HEX_LENGTH: number
+  VERIFYKEY_HEX_LENGTH: number
+  SECRETKEY_HEX_LENGTH: number
   ADDRESSBYTES_HEX_LENGTH: number
 }
 
@@ -33,12 +33,12 @@ export interface Constants {
  */
 export const Constants = <Constants>{
   SEEDBYTES: sodium.crypto_sign_SEEDBYTES,
-  PUBLICKEYBYTES: sodium.crypto_sign_PUBLICKEYBYTES,
-  PRIVATEKEYBYTES: sodium.crypto_sign_SECRETKEYBYTES,
+  VERIFYKEYBYTES: sodium.crypto_sign_VERIFYKEYBYTES,
+  SECRETKEYBYTES: sodium.crypto_sign_SECRETKEYBYTES,
   ADDRESSBYTES: 20,
   SIGNATUREBYTES: sodium.crypto_sign_BYTES,
-  PUBLICKEY_HEX_LENGTH: sodium.crypto_sign_PUBLICKEYBYTES * 2,
-  PRIVATEKEY_HEX_LENGTH: sodium.crypto_sign_SECRETKEYBYTES * 2,
+  VERIFYKEY_HEX_LENGTH: sodium.crypto_sign_VERIFYKEYBYTES * 2,
+  SECRETKEY_HEX_LENGTH: sodium.crypto_sign_SECRETKEYBYTES * 2,
   ADDRESSBYTES_HEX_LENGTH: 40,
 }
 
@@ -58,40 +58,40 @@ export function normalizeMessage(message: Message) {
  * @param seed 32-byte Buffer seed
  */
 export function generateKeypair(seed?: Buffer): KeyPair {
-  const privateKeyBuff = new Buffer(Constants.PRIVATEKEYBYTES)
-  const publicKeyBuff = new Buffer(Constants.PUBLICKEYBYTES)
+  const secretKeyBuff = new Buffer(Constants.SECRETKEYBYTES)
+  const verifyKeyBuff = new Buffer(Constants.VERIFYKEYBYTES)
 
   if (seed && seed.length === Constants.SEEDBYTES)
-    sodium.crypto_sign_seed_keypair(publicKeyBuff, privateKeyBuff, seed)
-  else sodium.crypto_sign_keypair(publicKeyBuff, privateKeyBuff)
+    sodium.crypto_sign_seed_keypair(verifyKeyBuff, secretKeyBuff, seed)
+  else sodium.crypto_sign_keypair(verifyKeyBuff, secretKeyBuff)
 
   return {
-    privateKey: privateKeyBuff.toString('hex'),
-    publicKey: publicKeyBuff.toString('hex'),
-    address: publicKeyToAddress(privateKeyBuff.toString('hex')),
+    secretKey: secretKeyBuff.toString('hex'),
+    verifyKey: verifyKeyBuff.toString('hex'),
+    address: verifyKeyToAddress(secretKeyBuff.toString('hex')),
   }
 }
 
 /**
- * Get public key from private key
+ * Get public key from secret key
  *
- * @param privateKey 64-byte private key string
+ * @param secretKey 64-byte secret key string
  */
-export function privateKeyToPublicKey(privateKey: PrivateKey): PublicKey {
-  return privateKey.slice(
-    Constants.PRIVATEKEY_HEX_LENGTH - Constants.PUBLICKEY_HEX_LENGTH,
-    Constants.PRIVATEKEY_HEX_LENGTH
+export function secretKeyToVerifyKey(secretKey: SecretKey): VerifyKey {
+  return secretKey.slice(
+    Constants.SECRETKEY_HEX_LENGTH - Constants.VERIFYKEY_HEX_LENGTH,
+    Constants.SECRETKEY_HEX_LENGTH
   )
 }
 
 /**
  * Public key to address
  *
- * @param publicKey 32-byte public key string
+ * @param verifyKey 32-byte public key string
  */
-export function publicKeyToAddress(publicKey: PublicKey): Address {
+export function verifyKeyToAddress(verifyKey: VerifyKey): Address {
   const Address = shajs('sha256')
-    .update(Buffer.from(publicKey, 'hex'))
+    .update(Buffer.from(verifyKey, 'hex'))
     .digest('hex')
   return Address.slice(0, Constants.ADDRESSBYTES_HEX_LENGTH)
 }
@@ -99,14 +99,14 @@ export function publicKeyToAddress(publicKey: PublicKey): Address {
  * Get message signature
  *
  * @param message arbitrary message
- * @param privateKey 64-byte private key string
+ * @param secretKey 64-byte secret key string
  */
-export function sign(message: Message, privateKey: PrivateKey): Signature {
+export function sign(message: Message, secretKey: SecretKey): Signature {
   const messageBuff = normalizeMessage(message)
-  const privateKeyBuff = Buffer.from(privateKey, 'hex')
+  const secretKeyBuff = Buffer.from(secretKey, 'hex')
   const signatureBuff = new Buffer(Constants.SIGNATUREBYTES)
 
-  sodium.crypto_sign_detached(signatureBuff, messageBuff, privateKeyBuff)
+  sodium.crypto_sign_detached(signatureBuff, messageBuff, secretKeyBuff)
 
   return signatureBuff.toString('hex')
 }
@@ -116,20 +116,20 @@ export function sign(message: Message, privateKey: PrivateKey): Signature {
  *
  * @param signature 64-byte signature
  * @param message arbitrary message
- * @param publicKey 32-byte private key string
+ * @param verifyKey 32-byte secret key string
  */
 export function verify(
   signature: Signature,
   message: Message,
-  publicKey: PublicKey
+  verifyKey: VerifyKey
 ): boolean {
   const signatureBuff = Buffer.from(signature, 'hex')
   const messageBuff = normalizeMessage(message)
-  const publicKeyBuff = Buffer.from(publicKey, 'hex')
+  const verifyKeyBuff = Buffer.from(verifyKey, 'hex')
 
   return sodium.crypto_sign_verify_detached(
     signatureBuff,
     messageBuff,
-    publicKeyBuff
+    verifyKeyBuff
   )
 }
