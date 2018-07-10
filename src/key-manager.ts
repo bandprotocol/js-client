@@ -9,19 +9,20 @@ export interface GeneratedKey {
   address: string
 }
 
+const mnemonic = BIP39.generateMnemonic(256)
+
 export class KeyManager {
   /**
    * A utility to create random mnemonic and secret key
    */
   static generateRandomKey(): GeneratedKey {
-    // Use BIP39 to generate mnemonic
-    const mnemonic = BIP39.generateMnemonic()
+    // Use BIP39 to generate 24-words mnemonic
+    const mnemonic = BIP39.generateMnemonic(256)
 
     const { SEEDBYTES } = ED25519.Constants
 
-    // The mnemonic yeilds 64 bytes of seed
-    // the ED25519 only use 32 bytes, which is plenty enough
-    const seed: Buffer = BIP39.mnemonicToSeed(mnemonic).slice(0, SEEDBYTES)
+    const seedHex = BIP39.mnemonicToEntropy(mnemonic)
+    const seed = Buffer.from(seedHex, 'hex')
     const keypair = ED25519.generateKeypair(seed)
 
     return {
@@ -36,16 +37,14 @@ export class KeyManager {
    * A factory that instantiate KeyManager from mnemonic
    */
   static fromMnemonic(mnemonic: string[]) {
-    if (mnemonic.length !== 12) {
-      throw new Error('Mnemonic phrase must have 12 words')
+    if (mnemonic.length !== 24) {
+      throw new Error('Mnemonic phrase must have 24 words')
     }
 
     const { SEEDBYTES } = ED25519.Constants
 
-    const seed: Buffer = BIP39.mnemonicToSeed(mnemonic.join(' ')).slice(
-      0,
-      SEEDBYTES
-    )
+    const seedHex = BIP39.mnemonicToEntropy(mnemonic.join(' '))
+    const seed = Buffer.from(seedHex, 'hex')
     const keypair = ED25519.generateKeypair(seed)
 
     return new KeyManager(keypair.secretKey)

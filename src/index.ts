@@ -48,8 +48,8 @@ export default class BandProtocolClient {
             ? config.keyProvider.mnemonic.trim().split(' ')
             : config.keyProvider.mnemonic
 
-        if (mnemonicArr.length !== 12) {
-          throw new Error('Mnemonic must consist of 12 words')
+        if (mnemonicArr.length !== 24) {
+          throw new Error('Mnemonic must consist of 24 words')
         }
 
         this.key = KeyManager.fromMnemonic(mnemonicArr)
