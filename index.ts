@@ -23,3 +23,11 @@ import BandProtocolClient from './src/index'
 
 module.exports = BandProtocolClient
 module.exports.default = BandProtocolClient
+
+import * as ED25518 from '~/crypto/ed25519'
+import * as SecretBox from '~/crypto/secretbox'
+
+module.exports.__tools__ = {
+  ED25518,
+  SecretBox,
+}

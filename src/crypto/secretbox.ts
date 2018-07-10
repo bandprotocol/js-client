@@ -26,7 +26,7 @@ export const Constants = <Constants>{
 }
 
 /**
- * Utility function to turn utf8 message format into UInt8Array
+ * Utility function to turn utf8 message format into Buffer
  */
 export function normalizeMessage(message: Message): Buffer {
   if (message instanceof Buffer) return message
@@ -99,8 +99,11 @@ export function decrypt(box: EncryptedMessage, passcode: Passcode): string {
   )
 
   // Throw if the passcode is incorrect (messageBuffer is empty)
-  if (![...messageBuffer.values()].some(v => v !== 0))
+  const message = messageBuffer.toString('utf8').replace(/[\u0000]/g, '')
+
+  if (!message) {
     throw new Error('Incorrect passcode')
+  }
 
   return messageBuffer.toString('utf8')
 }

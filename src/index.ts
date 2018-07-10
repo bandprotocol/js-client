@@ -6,8 +6,9 @@ interface ClientConfig {
   keyProvider?:
     | string
     | {
-        box: string
-        passcode: string
+        box?: string
+        passcode?: string
+        mnemonic?: string | string[]
       }
 }
 
@@ -38,6 +39,20 @@ export default class BandProtocolClient {
           config.keyProvider.box,
           config.keyProvider.passcode
         )
+      } else if (
+        typeof config.keyProvider === 'object' &&
+        config.keyProvider.mnemonic
+      ) {
+        let mnemonicArr =
+          typeof config.keyProvider.mnemonic === 'string'
+            ? config.keyProvider.mnemonic.trim().split(' ')
+            : config.keyProvider.mnemonic
+
+        if (mnemonicArr.length !== 12) {
+          throw new Error('Mnemonic must consist of 12 words')
+        }
+
+        this.key = KeyManager.fromMnemonic(mnemonicArr)
       }
     }
   }

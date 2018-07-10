@@ -91,7 +91,7 @@ export function privateKeyToPublicKey(privateKey: PrivateKey): PublicKey {
  */
 export function publicKeyToAddress(publicKey: PublicKey): Address {
   const Address = shajs('sha256')
-    .update(publicKey)
+    .update(Buffer.from(publicKey, 'hex'))
     .digest('hex')
   return Address.slice(0, Constants.ADDRESSBYTES_HEX_LENGTH)
 }

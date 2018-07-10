@@ -28,6 +28,9 @@ export class RPCEngine {
     try {
       const response = await fetch(this.endpoint, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           jsonrpc: '2.0',
           method,

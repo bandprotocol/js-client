@@ -3,7 +3,7 @@ function randomRange(ceil: number) {
 }
 
 function randomBytes(bytes: number) {
-  const buffer = new Uint8Array(bytes)
+  const buffer = new Buffer(bytes)
   for (let i = 0; i < bytes; i++) {
     buffer[i] = randomRange(256)
   }
