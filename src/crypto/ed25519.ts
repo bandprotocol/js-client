@@ -85,7 +85,7 @@ export function secretKeyToVerifyKey(secretKey: SecretKey): VerifyKey {
 }
 
 /**
- * Public key to address
+ * Verify key to address
  *
  * @param verifyKey 32-byte public key string
  */

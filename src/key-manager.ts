@@ -9,9 +9,12 @@ export interface GeneratedKey {
   address: string
 }
 
-const mnemonic = BIP39.generateMnemonic(256)
-
 export class KeyManager {
+  /**
+   * Expose utility functions
+   */
+  static verifyKeyToAddress = ED25519.verifyKeyToAddress
+
   /**
    * A utility to create random mnemonic and secret key
    */
