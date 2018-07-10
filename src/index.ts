@@ -6,7 +6,7 @@ interface ClientConfig {
   keyProvider?:
     | string
     | {
-        box?: string
+        secretbox?: string
         passcode?: string
         mnemonic?: string | string[]
       }
@@ -32,11 +32,11 @@ export default class BandProtocolClient {
         this.key = KeyManager.fromSecretKey(config.keyProvider)
       } else if (
         typeof config.keyProvider === 'object' &&
-        config.keyProvider.box &&
+        config.keyProvider.secretbox &&
         config.keyProvider.passcode
       ) {
         this.key = KeyManager.fromSecretBox(
-          config.keyProvider.box,
+          config.keyProvider.secretbox,
           config.keyProvider.passcode
         )
       } else if (

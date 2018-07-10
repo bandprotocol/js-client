@@ -20,9 +20,9 @@ describe('class:BandProtocolClient', () => {
     const client = new BandProtocolClient({
       keyProvider: secretKey,
     })
-    const box = client.key.encrypt(passcode)
+    const secretbox = client.key.encrypt(passcode)
     const recoveredClient = new BandProtocolClient({
-      keyProvider: { box, passcode },
+      keyProvider: { secretbox, passcode },
     })
 
     should.equal(secretKey, recoveredClient.key.getSecretKey())

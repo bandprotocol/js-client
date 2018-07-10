@@ -62,11 +62,11 @@ export class KeyManager {
    * A factory that instantiate KeyManager from SecretBox
    */
   static fromSecretBox(
-    box: SecretBox.EncryptedMessage,
+    secretbox: SecretBox.EncryptedMessage,
     passcode: SecretBox.Passcode
   ) {
     try {
-      const secretKey = SecretBox.decrypt(box, passcode)
+      const secretKey = SecretBox.decrypt(secretbox, passcode)
       return new KeyManager(secretKey)
     } catch (e) {
       return null
