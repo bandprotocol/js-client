@@ -12,7 +12,7 @@ export function verifyKeyToAddress(verifyKey: ED25519.VerifyKey) {
 
   // Convert Array<bytes> into Array<bits>
   const intermediateBits: Array<boolean> = []
-  intermediateAddressBuff.forEach(byte =>
+  Array.from(intermediateAddressBuff).forEach((byte: number) =>
     [...Array(8)].forEach((_, i) => {
       intermediateBits.push((byte & (1 << (7 - i))) > 0)
     })

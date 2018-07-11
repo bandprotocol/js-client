@@ -1,6 +1,6 @@
 {
   "name": "bandprotocol",
-  "version": "0.4.2",
+  "version": "0.4.8",
   "description": "Javascript client for Band Protocol blockchain",
   "main": "dist.js",
   "scripts": {
