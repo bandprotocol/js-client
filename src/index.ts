@@ -15,6 +15,7 @@ interface ClientConfig {
 export default class BandProtocolClient {
   static generateRandomKey = KeyManager.generateRandomKey
   static verifyKeyToAddress = KeyManager.verifyKeyToAddress
+  static verifySignature = KeyManager.verifySignature
 
   blockchain: Blockchain
   key: KeyManager

@@ -1,8 +1,6 @@
 import * as chai from 'chai'
 import BandProtocolClient from '~/index'
 
-import * as BIP39 from '~/crypto/bip39'
-
 const should = chai.should()
 
 describe('class:BandProtocolClient', () => {
@@ -13,6 +11,14 @@ describe('class:BandProtocolClient', () => {
     })
 
     should.exist(client)
+  })
+
+  it('should expose utility functions', () => {
+    BandProtocolClient.should.contain.keys([
+      'generateRandomKey',
+      'verifyKeyToAddress',
+      'verifySignature',
+    ])
   })
 
   it('should generate 24-word mnemonic from generateRandomKey and recover secret key', () => {

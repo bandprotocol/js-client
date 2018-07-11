@@ -15,6 +15,7 @@ export class KeyManager {
    * Expose utility functions
    */
   static verifyKeyToAddress = verifyKeyToAddress
+  static verifySignature = ED25519.verify
 
   /**
    * A utility to create random mnemonic and secret key

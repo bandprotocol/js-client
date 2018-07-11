@@ -1,3 +1,10 @@
+/**
+ * This file exposes BandProtocolClient and shim some of the
+ * components to make it work on Web, Node.js, and React Native
+ *
+ * This can get a bit too ugly and hard to test. Treat it with care.
+ */
+
 // Shim
 declare var global: { crypto; fetch; window; self }
 require('buffer')

@@ -1,6 +1,6 @@
 {
   "name": "bandprotocol",
-  "version": "0.4.0",
+  "version": "0.4.2",
   "description": "Javascript client for Band Protocol blockchain",
   "main": "dist.js",
   "scripts": {
@@ -30,7 +30,6 @@
     "chai": "^4.1.2",
     "create-hash": "^1.1.0",
     "derequire": "^2.0.6",
-    "isomorphic-fetch": "^2.2.1",
     "isomorphic-webcrypto": "^1.5.0",
     "mocha": "^5.2.0",
     "nanoassert": "^1.0.0",
@@ -51,5 +50,7 @@
     "semi": false,
     "singleQuote": true
   },
-  "dependencies": {}
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1"
+  }
 }
