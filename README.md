@@ -7,7 +7,7 @@
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 [![Dependency Status](https://david-dm.org/bandprotocol/js-client.svg)](https://david-dm.org/bandprotocol/js-client)
 [![devDependency Status](https://david-dm.org/bandprotocol/js-client/dev-status.svg)](https://david-dm.org/bandprotocol/js-client#info=devDependencies)
-[![NPM Downloads](https://img.shields.io/npm/dt/express.svg)](https://nodei.co/npm/bandprotocol/)
+[![NPM Downloads](https://img.shields.io/npm/dt/bandprotocol.svg)](https://nodei.co/npm/bandprotocol/)
 
 ## Dependencies
 
@@ -65,9 +65,9 @@ const client = new BandProtocolClient({
 const unsignedTx = await client.blockchain.txgen({
   msgid: 1,
   vk: '6ddb22994b551f4da5818e7a257d467e9af753348194f31dddc5f9aa489d3da1',
-  dest: 'AX62 ECTZ WZZ5 XVTG N8NL 6EVB 9TPH TELJ ZBRL,
+  dest: 'AX62 ECTZ WZZ5 XVTG N8NL 6EVB 9TPH TELJ ZBRL',
   token: 'BX63 AAAA AAAA AAAA AAAA AAAA AAAA AAAA AAAA',
-  value: '200',
+  value: '200000',
 })
 
 // Sign the transaction
