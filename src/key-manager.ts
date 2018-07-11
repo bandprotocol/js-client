@@ -1,6 +1,7 @@
 import * as ED25519 from '~/crypto/ed25519'
 import * as BIP39 from '~/crypto/bip39'
 import * as SecretBox from '~/crypto/secretbox'
+import { verifyKeyToAddress } from '~/utils/address'
 
 export interface GeneratedKey {
   mnemonic: string[]
@@ -13,7 +14,7 @@ export class KeyManager {
   /**
    * Expose utility functions
    */
-  static verifyKeyToAddress = ED25519.verifyKeyToAddress
+  static verifyKeyToAddress = verifyKeyToAddress
 
   /**
    * A utility to create random mnemonic and secret key
@@ -80,7 +81,7 @@ export class KeyManager {
 
   private constructor(private secretKey: ED25519.SecretKey) {
     this.verifyKey = ED25519.secretKeyToVerifyKey(secretKey)
-    this.address = ED25519.verifyKeyToAddress(this.verifyKey)
+    this.address = verifyKeyToAddress(this.verifyKey)
   }
 
   getSecretKey() {

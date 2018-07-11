@@ -1,5 +1,5 @@
 import sodium = require('./sodium')
-import shajs = require('sha.js')
+import { verifyKeyToAddress } from '~/utils/address'
 
 /**
  * Define Interfaces
@@ -25,7 +25,7 @@ export interface Constants {
   SIGNATUREBYTES: number
   VERIFYKEY_HEX_LENGTH: number
   SECRETKEY_HEX_LENGTH: number
-  ADDRESSBYTES_HEX_LENGTH: number
+  ADDRESS_INTERMEDIATEBYTES_LENGTH: number
 }
 
 /**
@@ -39,7 +39,7 @@ export const Constants = <Constants>{
   SIGNATUREBYTES: sodium.crypto_sign_BYTES,
   VERIFYKEY_HEX_LENGTH: sodium.crypto_sign_VERIFYKEYBYTES * 2,
   SECRETKEY_HEX_LENGTH: sodium.crypto_sign_SECRETKEYBYTES * 2,
-  ADDRESSBYTES_HEX_LENGTH: 40,
+  ADDRESS_INTERMEDIATEBYTES_LENGTH: 20,
 }
 
 /**
@@ -84,17 +84,6 @@ export function secretKeyToVerifyKey(secretKey: SecretKey): VerifyKey {
   )
 }
 
-/**
- * Verify key to address
- *
- * @param verifyKey 32-byte public key string
- */
-export function verifyKeyToAddress(verifyKey: VerifyKey): Address {
-  const Address = shajs('sha256')
-    .update(Buffer.from(verifyKey, 'hex'))
-    .digest('hex')
-  return Address.slice(0, Constants.ADDRESSBYTES_HEX_LENGTH)
-}
 /**
  * Get message signature
  *
