@@ -6,8 +6,7 @@
  */
 
 // Shim
-declare var global: { crypto; fetch; window; self }
-require('buffer')
+declare var global: { Buffer; crypto; fetch; window; self }
 
 // Shim window scope in Node.js
 if (typeof window === 'undefined') {
@@ -24,6 +23,9 @@ global.crypto = global.crypto || require('isomorphic-webcrypto')
 
 // Shim fetch
 global.fetch = global.fetch || require('isomorphic-fetch')
+
+// Shim Buffer
+global.Buffer = require('safe-buffer').Buffer
 
 // Business as usual
 import BandProtocolClient from './src/index'
