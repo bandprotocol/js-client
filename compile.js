@@ -5,7 +5,9 @@ var derequire = require('browserify-derequire')
 var path = require('path')
 var tsconfig = require('./tsconfig.json')
 
-global.crypto = require('isomorphic-webcrypto')
+if (!global.crypto) {
+  global.crypto = require('isomorphic-webcrypto')
+}
 
 browserify('index.ts', { standalone: 'default' })
   .plugin(pathmodify, {

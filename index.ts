@@ -19,13 +19,19 @@ if (typeof self === 'undefined') {
 }
 
 // Shim crypto module with isomorphic-webcrypto
-global.crypto = global.crypto || require('isomorphic-webcrypto')
+if (!global.crypto) {
+  global.crypto = require('isomorphic-webcrypto')
+}
 
 // Shim fetch
-global.fetch = global.fetch || require('isomorphic-fetch')
+if (!global.fetch) {
+  global.fetch = require('isomorphic-fetch')
+}
 
 // Shim Buffer
-global.Buffer = require('safe-buffer').Buffer
+if (!global.Buffer) {
+  global.Buffer = require('safe-buffer').Buffer
+}
 
 // Business as usual
 import BandProtocolClient from './src/index'
