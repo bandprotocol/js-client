@@ -6,7 +6,8 @@
   "scripts": {
     "build": "node compile.js > dist.js",
     "prepublishOnly": "node compile.js > dist.js",
-    "test": "mocha -r ts-node/register -r tsconfig-paths/register test/**/*.spec.ts"
+    "test": "mocha -r ts-node/register -r tsconfig-paths/register test/**/*.spec.ts",
+    "tf": "mocha -r ts-node/register -r tsconfig-paths/register"
   },
   "repository": {
     "type": "git",
@@ -51,6 +52,7 @@
     "singleQuote": true
   },
   "dependencies": {
+    "bignumber.js": "^7.2.1",
     "buffer": "^5.1.0",
     "isomorphic-fetch": "^2.2.1"
   },
