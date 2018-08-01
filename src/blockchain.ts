@@ -1,4 +1,3 @@
-import * as CallableInstance from 'callable-instance'
 import { KeyManager } from '~/key-manager'
 import { generateRandomString } from '~/utils'
 import { varintEncode } from '~/utils/varint'
@@ -10,8 +9,6 @@ import {
   UnsignedInteger,
   Boolean,
 } from '~/utils/data-structure'
-
-var fetch = require('isomorphic-fetch')
 
 const IDENT_LOOKUP = {
   void: new Void(),

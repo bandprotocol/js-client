@@ -20,12 +20,12 @@ export default class BandProtocolClient {
   key: KeyManager
 
   constructor(
-    public config: Config,
+    public config: Config | string,
     keyProvider: KeyProvider,
     abi = DefaultABI
   ) {
-    if (typeof config !== 'object') {
-      throw new Error('BandProtocolClient has to be instantiated with config')
+    if (typeof config === 'string') {
+      config = new Config(config)
     }
 
     this.blockchain = new Blockchain(config, abi)

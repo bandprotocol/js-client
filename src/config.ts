@@ -17,5 +17,7 @@ export class MockClock {
 }
 
 export class Config {
-  constructor(public endpoint, public clock) {}
+  constructor(public endpoint, public clock?) {
+    if (!clock) this.clock = new RealClock()
+  }
 }
