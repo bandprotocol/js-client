@@ -547,6 +547,10 @@ cached-path-relative@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/cached-path-relative/-/cached-path-relative-1.0.1.tgz#d09c4b52800aa4c078e2dd81a869aac90d2e54e7"
 
+callable-instance@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/callable-instance/-/callable-instance-1.0.0.tgz#d6c7caaacafc598c02d44e2c6e20faae9634549b"
+
 camelcase@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-3.0.0.tgz#32fc4b9fcdaf845fcdf7e73bb97cac2261f0ab0a"

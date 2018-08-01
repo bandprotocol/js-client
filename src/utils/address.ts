@@ -3,16 +3,20 @@ import shajs = require('sha.js')
 
 export const ADDRESS_LETTER_SPACE = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
 
-export function verifyKeyToAddress(verifyKey: ED25519.VerifyKey) {
-  // Calculate RAW address bytes
-  const intermediateAddressBuff = shajs('sha256')
+export function verifyKeyToRawAddress(verifyKey: ED25519.VerifyKey) {
+  return shajs('sha256')
     .update(Buffer.from(verifyKey, 'hex'))
     .digest()
     .slice(0, ED25519.Constants.ADDRESS_INTERMEDIATEBYTES_LENGTH)
+}
+
+export function verifyKeyToIBANAddress(verifyKey: ED25519.VerifyKey) {
+  // Calculate RAW address bytes
+  const rawAddress = verifyKeyToRawAddress(verifyKey)
 
   // Convert Array<bytes> into Array<bits>
   const intermediateBits: Array<boolean> = []
-  Array.from(intermediateAddressBuff).forEach((byte: number) =>
+  Array.from(rawAddress).forEach((byte: number) =>
     [...Array(8)].forEach((_, i) => {
       intermediateBits.push((byte & (1 << (7 - i))) > 0)
     })

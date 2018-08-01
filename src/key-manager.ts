@@ -1,7 +1,8 @@
 import * as ED25519 from '~/crypto/ed25519'
 import * as BIP39 from '~/crypto/bip39'
 import * as SecretBox from '~/crypto/secretbox'
-import { verifyKeyToAddress } from '~/utils/address'
+import { varintEncode } from '~/utils/varint'
+import { verifyKeyToIBANAddress, verifyKeyToRawAddress } from '~/utils/address'
 
 export interface GeneratedKey {
   mnemonic: string[]
@@ -14,7 +15,7 @@ export class KeyManager {
   /**
    * Expose utility functions
    */
-  static verifyKeyToAddress = verifyKeyToAddress
+  static verifyKeyToAddress = verifyKeyToIBANAddress
   static verifySignature = ED25519.verify
 
   /**
@@ -78,11 +79,9 @@ export class KeyManager {
   }
 
   private verifyKey: ED25519.VerifyKey
-  private address: ED25519.Address
 
   private constructor(private secretKey: ED25519.SecretKey) {
     this.verifyKey = ED25519.secretKeyToVerifyKey(secretKey)
-    this.address = verifyKeyToAddress(this.verifyKey)
   }
 
   getSecretKey() {
@@ -94,15 +93,26 @@ export class KeyManager {
   }
 
   getAddress() {
-    return this.address
+    return verifyKeyToRawAddress(this.verifyKey)
   }
 
-  generateSignature(messageHex: string): ED25519.Signature {
-    return ED25519.sign(messageHex, this.secretKey)
+  getIBANAddress() {
+    return verifyKeyToIBANAddress(this.verifyKey)
   }
 
-  sign(messageHex: string): string {
-    return messageHex + this.generateSignature(messageHex)
+  generateSignature(message: Buffer): ED25519.Signature {
+    return ED25519.sign(message, this.secretKey)
+  }
+
+  sign(nonce: number, data: Buffer | string): string {
+    if (typeof data === 'string') data = Buffer.from(data, 'hex')
+    data = Buffer.concat([varintEncode(nonce), data])
+    return (
+      this.getAddress() +
+      '01' +
+      this.generateSignature(data) +
+      data.toString('hex')
+    )
   }
 
   encrypt(passcode: SecretBox.Passcode) {

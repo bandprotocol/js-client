@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js'
 
 var Buffer = require('buffer/').Buffer
 
-export function fromVarint(bytes: Buffer) {
+export function varintDecode(bytes: Buffer) {
   let bin = ''
   for (let i = 0; i < bytes.length; i++) {
     bin = ('00000000' + (bytes[i] & 0x7f).toString(2)).slice(-7) + bin
@@ -11,8 +11,8 @@ export function fromVarint(bytes: Buffer) {
   return new BigNumber(bin, 2)
 }
 
-export function toVarint(bignum: BigNumber): Buffer {
-  let bin = bignum.toString(2)
+export function varintEncode(num: BigNumber | number): Buffer {
+  let bin = num.toString(2)
   const varint = []
   while (bin) {
     const val = parseInt(bin.slice(-7), 2)

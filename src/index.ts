@@ -1,16 +1,15 @@
 import { Blockchain } from '~/blockchain'
 import { KeyManager } from '~/key-manager'
+import { Config } from '~/config'
+import DefaultABI from '~/default-abi'
 
-interface ClientConfig {
-  httpEndpoint?: string
-  keyProvider?:
-    | string
-    | {
-        secretbox?: string
-        passcode?: string
-        mnemonic?: string | string[]
-      }
-}
+type KeyProvider =
+  | string
+  | {
+      secretbox?: string
+      passcode?: string
+      mnemonic?: string | string[]
+    }
 
 export default class BandProtocolClient {
   static generateRandomKey = KeyManager.generateRandomKey
@@ -20,35 +19,34 @@ export default class BandProtocolClient {
   blockchain: Blockchain
   key: KeyManager
 
-  constructor(public config: ClientConfig) {
+  constructor(
+    public config: Config,
+    keyProvider: KeyProvider,
+    abi = DefaultABI
+  ) {
     if (typeof config !== 'object') {
       throw new Error('BandProtocolClient has to be instantiated with config')
     }
 
-    if (config.httpEndpoint) {
-      this.blockchain = new Blockchain(config.httpEndpoint)
-    }
+    this.blockchain = new Blockchain(config, abi)
 
-    if (config.keyProvider) {
-      if (typeof config.keyProvider === 'string') {
-        this.key = KeyManager.fromSecretKey(config.keyProvider)
+    if (keyProvider) {
+      if (typeof keyProvider === 'string') {
+        this.key = KeyManager.fromSecretKey(keyProvider)
       } else if (
-        typeof config.keyProvider === 'object' &&
-        config.keyProvider.secretbox &&
-        config.keyProvider.passcode
+        typeof keyProvider === 'object' &&
+        keyProvider.secretbox &&
+        keyProvider.passcode
       ) {
         this.key = KeyManager.fromSecretBox(
-          config.keyProvider.secretbox,
-          config.keyProvider.passcode
+          keyProvider.secretbox,
+          keyProvider.passcode
         )
-      } else if (
-        typeof config.keyProvider === 'object' &&
-        config.keyProvider.mnemonic
-      ) {
+      } else if (typeof keyProvider === 'object' && keyProvider.mnemonic) {
         let mnemonicArr =
-          typeof config.keyProvider.mnemonic === 'string'
-            ? config.keyProvider.mnemonic.trim().split(' ')
-            : config.keyProvider.mnemonic
+          typeof keyProvider.mnemonic === 'string'
+            ? keyProvider.mnemonic.trim().split(' ')
+            : keyProvider.mnemonic
 
         if (mnemonicArr.length !== 24) {
           throw new Error('Mnemonic must consist of 24 words')
