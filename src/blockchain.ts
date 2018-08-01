@@ -8,11 +8,14 @@ import {
   UnboundBuffer,
   String,
   UnsignedInteger,
+  Boolean,
 } from '~/utils/data-structure'
+
+var fetch = require('isomorphic-fetch')
 
 const IDENT_LOOKUP = {
   void: new Void(),
-  bool: new UnsignedInteger(1),
+  bool: new Boolean(),
   uint8_t: new UnsignedInteger(8),
   uint16_t: new UnsignedInteger(16),
   uint32_t: new UnsignedInteger(32),
@@ -43,7 +46,8 @@ export class Function {
   }
 
   raw_tx(...args) {
-    if (this.params != args.length) {
+    if (this.params.length !== args.length) {
+      console.log(this.params, args.length)
       throw new Error(`Invalid number of arguments to ${this.name}`)
     }
 
@@ -62,7 +66,7 @@ export class Function {
       typeof args[1] === 'number'
     ) {
       tx_data = Buffer.from(
-        args[0].sign(args[1], this.raw_tx(args.slice(2))),
+        args[0].sign(args[1], this.raw_tx(...args.slice(2))),
         'hex'
       )
     } else {
@@ -71,6 +75,12 @@ export class Function {
 
     // TODO:
     const timestamp = varintEncode(this.config.clock.get_time())
+
+    console.log('\n\n>> ---------- TXN ---------------')
+    console.log('>>', this.name, this.addr, this.params)
+    console.log('>>', args)
+    console.log('>>', tx_data)
+    console.log('>> ----------------------------')
 
     const response = await fetch(this.config.endpoint, {
       method: 'POST',
@@ -87,6 +97,7 @@ export class Function {
       }),
     }).then(response => response.json())
 
+    console.log('RESPONSE:', response)
     const error_info = response.result.deliver_tx.info || ''
     const data = response.result.deliver_tx.data || ''
 
@@ -136,7 +147,7 @@ export class Contract {
 
     return new Function(
       this.config,
-      `${name}.${method}`,
+      `${this.name}.${method}`,
       this.addr,
       this.abi_contract[method].opcode,
       this.abi_contract[method].params,
@@ -153,14 +164,12 @@ export class ContractCreator {
     return new Contract(this.config, this.name, addr, this.abi_contract)
   }
 
-  get constructor() {
-    return (...args) => {
-      const tx_data = args.map((arg, idx) =>
-        IDENT_LOOKUP[this.abi_contract['constructor_params'][idx]].dump(arg)
-      )
+  __constructor__(...args) {
+    const tx_data = args.map((arg, idx) =>
+      IDENT_LOOKUP[this.abi_contract['constructor_params'][idx]].dump(arg)
+    )
 
-      return Buffer.concat([varintEncode(this.abi_contract.id), ...tx_data])
-    }
+    return Buffer.concat([varintEncode(this.abi_contract.id), ...tx_data])
   }
 }
 

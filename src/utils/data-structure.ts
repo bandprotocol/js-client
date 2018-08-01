@@ -33,6 +33,15 @@ export class String {
   }
 }
 
+export class Boolean {
+  dump(value: boolean): Buffer {
+    return varintEncode(value ? 1 : 0)
+  }
+  parse(data: Buffer): boolean {
+    return !!varintDecode(data).toNumber()
+  }
+}
+
 export class UnsignedInteger {
   private max_value
   constructor(precision_bit: number) {

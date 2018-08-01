@@ -7,6 +7,7 @@ export default {
       result: 'Buffer',
       type: 'action',
     },
+    get_nonce: { opcode: 2, params: [], result: 'uint256_t', type: 'query' },
     id: 1,
   },
   Creator: {
@@ -83,6 +84,12 @@ export default {
     },
     get_voting_id: { opcode: 8, params: [], result: 'Address', type: 'query' },
     id: 4,
+    is_proposal: {
+      opcode: 16,
+      params: ['uint256_t'],
+      result: 'bool',
+      type: 'query',
+    },
     need_update: {
       opcode: 14,
       params: ['uint256_t'],

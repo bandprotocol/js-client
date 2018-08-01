@@ -106,12 +106,19 @@ export class KeyManager {
 
   sign(nonce: number, data: Buffer | string): string {
     if (typeof data === 'string') data = Buffer.from(data, 'hex')
-    data = Buffer.concat([varintEncode(nonce), data])
-    return (
-      this.getAddress() +
+    const tx = Buffer.concat([varintEncode(nonce), data])
+    console.log('##', tx)
+    const x =
+      this.getAddress().toString('hex') +
       '01' +
-      this.generateSignature(data) +
-      data.toString('hex')
+      this.generateSignature(tx) +
+      tx.toString('hex')
+    console.log('##', x, x.length)
+    return (
+      this.getAddress().toString('hex') +
+      '01' +
+      this.generateSignature(tx) +
+      tx.toString('hex')
     )
   }
 

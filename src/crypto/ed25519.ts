@@ -1,5 +1,5 @@
 import sodium = require('./sodium')
-import { verifyKeyToAddress } from '~/utils/address'
+import { verifyKeyToIBANAddress } from '~/utils/address'
 
 /**
  * Define Interfaces
@@ -68,7 +68,7 @@ export function generateKeypair(seed?: Buffer): KeyPair {
   return {
     secretKey: secretKeyBuff.toString('hex'),
     verifyKey: verifyKeyBuff.toString('hex'),
-    address: verifyKeyToAddress(secretKeyBuff.toString('hex')),
+    address: verifyKeyToIBANAddress(secretKeyBuff.toString('hex')),
   }
 }
 
