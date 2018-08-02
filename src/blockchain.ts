@@ -73,11 +73,11 @@ export class Function {
     // TODO:
     const timestamp = varintEncode(this.config.clock.get_time())
 
-    console.log('\n\n>> ---------- TXN ---------------')
-    console.log('>>', this.name, this.addr, this.params)
-    console.log('>>', args)
-    console.log('>>', tx_data)
-    console.log('>> ----------------------------')
+    // console.log('\n\n>> ---------- TXN ---------------')
+    // console.log('>>', this.name, this.addr, this.params)
+    // console.log('>>', args)
+    // console.log('>>', tx_data)
+    // console.log('>> ----------------------------')
 
     const response = await fetch(this.config.endpoint, {
       method: 'POST',

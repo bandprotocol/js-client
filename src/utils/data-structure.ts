@@ -29,7 +29,12 @@ export class String {
     return Buffer.from(varintEncode(value.length) + value)
   }
   parse(data) {
-    return data
+    let startIndex = 0
+    while (startIndex < data.length) {
+      startIndex++
+      if (!(data[startIndex - 1] & 0x80)) break
+    }
+    return data.slice(startIndex).toString('utf8')
   }
 }
 
@@ -50,7 +55,10 @@ export class UnsignedInteger {
       2
     )
   }
-  dump(value: BigNumber | number): Buffer {
+  dump(value: BigNumber | number | string): Buffer {
+    if (typeof value === 'string') {
+      value = new BigNumber(value)
+    }
     return varintEncode(value)
   }
   parse(data: Buffer) {

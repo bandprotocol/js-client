@@ -13,7 +13,10 @@ export function verifyKeyToRawAddress(verifyKey: ED25519.VerifyKey) {
 export function verifyKeyToIBANAddress(verifyKey: ED25519.VerifyKey) {
   // Calculate RAW address bytes
   const rawAddress = verifyKeyToRawAddress(verifyKey)
+  return rawAddresToIBANAddress(rawAddress)
+}
 
+export function rawAddresToIBANAddress(rawAddress: Buffer) {
   // Convert Array<bytes> into Array<bits>
   const intermediateBits: Array<boolean> = []
   Array.from(rawAddress).forEach((byte: number) =>

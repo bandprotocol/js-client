@@ -64,6 +64,18 @@ export default {
       result: 'uint256_t',
       type: 'query',
     },
+    get_app_expire: {
+      opcode: 17,
+      params: ['uint256_t'],
+      result: 'uint64_t',
+      type: 'query',
+    },
+    get_challenger_id: {
+      opcode: 19,
+      params: ['uint256_t'],
+      result: 'Address',
+      type: 'query',
+    },
     get_content: {
       opcode: 11,
       params: ['uint256_t'],
@@ -74,6 +86,12 @@ export default {
       opcode: 12,
       params: ['uint256_t'],
       result: 'uint256_t',
+      type: 'query',
+    },
+    get_list_owner: {
+      opcode: 18,
+      params: ['uint256_t'],
+      result: 'Address',
       type: 'query',
     },
     get_poll_id: {
@@ -143,6 +161,12 @@ export default {
       type: 'action',
     },
     constructor_params: ['Address'],
+    get_commit_end_time: {
+      opcode: 10,
+      params: ['uint256_t'],
+      result: 'uint64_t',
+      type: 'query',
+    },
     get_period: {
       opcode: 8,
       params: ['uint256_t'],
@@ -153,6 +177,12 @@ export default {
       opcode: 9,
       params: ['uint256_t'],
       result: 'bool',
+      type: 'query',
+    },
+    get_reveal_end_time: {
+      opcode: 11,
+      params: ['uint256_t'],
+      result: 'uint64_t',
       type: 'query',
     },
     get_vote_against: {
