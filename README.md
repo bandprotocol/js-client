@@ -16,13 +16,6 @@
 
 The library allows Web, Node.js and React Native environment to connect with Band Chain. The code itself is written in TypeScript, but deployed as older ES5 ia Browserify to support older browser and React Native environments.
 
-<div align="center">
-  <a href="https://bandprotocol.com" target="_blank">
-    <img src="https://user-images.githubusercontent.com/891585/43634398-2929251c-9736-11e8-8e1d-2226bad24392.png" alt="Band Protocol Browser Wallet">
-  </a>
-</div>
-
-
 ## Dependencies
 
 - [TypeScript](https://www.typescriptlang.org/)
