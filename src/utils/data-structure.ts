@@ -26,7 +26,7 @@ export class UnboundBuffer {
 
 export class String {
   dump(value: string): Buffer {
-    return Buffer.from(varintEncode(value.length) + value)
+    return Buffer.concat([varintEncode(value.length), Buffer.from(value)])
   }
   parse(data) {
     let startIndex = 0
