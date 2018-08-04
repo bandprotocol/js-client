@@ -1,13 +1,20 @@
-# Band Protocol JS Library
+<div align="center">
+  <h1>
+    Band Protocol JS Library
+  </h1>
 
-[![NPM](https://nodei.co/npm/bandprotocol.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/bandprotocol/)
+  <p>
+    <strong>Official Javascript Client for Band Chain</strong>
 
 [![Code Style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![TypeScript](https://badges.frapsoft.com/typescript/code/typescript.svg?v=101)](https://github.com/ellerbrock/typescript-badges/)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 [![Dependency Status](https://david-dm.org/bandprotocol/js-client.svg)](https://david-dm.org/bandprotocol/js-client)
 [![devDependency Status](https://david-dm.org/bandprotocol/js-client/dev-status.svg)](https://david-dm.org/bandprotocol/js-client#info=devDependencies)
-[![NPM Downloads](https://img.shields.io/npm/dt/bandprotocol.svg)](https://nodei.co/npm/bandprotocol/)
+  </p>
+</div>
+
+The library allows Web, Node.js and React Native environment to connect with Band Chain. The code itself is written in TypeScript, but deployed as older ES5 ia Browserify to support older browser and React Native environments.
 
 ## Dependencies
 
@@ -16,6 +23,9 @@
 - [libsodium.js](https://github.com/jedisct1/libsodium.js)
 
 ## Installation
+
+
+[![NPM](https://nodei.co/npm/bandprotocol.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/bandprotocol/)
 
 ```
 npm i --save bandprotocol
