@@ -50,7 +50,16 @@ export default {
       result: 'void',
       type: 'action',
     },
-    constructor_params: ['Address', 'Address'],
+    constructor_params: [
+      'Address',
+      'Address',
+      'uint8_t',
+      'uint8_t',
+      'uint256_t',
+      'uint64_t',
+      'uint64_t',
+      'uint64_t',
+    ],
     deposit: {
       opcode: 2,
       params: ['uint256_t', 'uint256_t'],
@@ -194,6 +203,12 @@ export default {
     get_vote_for: {
       opcode: 6,
       params: ['uint256_t'],
+      result: 'uint256_t',
+      type: 'query',
+    },
+    get_voting_power: {
+      opcode: 12,
+      params: ['Address'],
       result: 'uint256_t',
       type: 'query',
     },
