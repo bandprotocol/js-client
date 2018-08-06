@@ -3,6 +3,9 @@ import { KeyManager } from '~/key-manager'
 import { Config } from '~/config'
 import DefaultABI from '~/default-abi'
 
+import { varintEncode } from '~/utils/varint'
+import shajs = require('sha.js')
+
 type KeyProvider =
   | string
   | {
@@ -15,6 +18,12 @@ export default class BandProtocolClient {
   static generateRandomKey = KeyManager.generateRandomKey
   static verifyKeyToAddress = KeyManager.verifyKeyToAddress
   static verifySignature = KeyManager.verifySignature
+
+  static hashedCommit(choice, nonce) {
+    return shajs('sha256')
+      .update(Buffer.concat([Buffer.from([choice]), varintEncode(nonce)]))
+      .digest()
+  }
 
   blockchain: Blockchain
   key: KeyManager
